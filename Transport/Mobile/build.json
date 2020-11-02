@@ -1,0 +1,19 @@
+{
+  "android": {
+    "release": {
+      "keystore": "",
+      "storePassword": "",
+      "alias": "",
+      "password": "",
+      "keystoreType": ""
+    }
+  },
+  "ios": {
+    "debug": {
+      "developmentTeam": "mehrdad_samadie@yahoo.com"
+    },
+    "release": {
+      "developmentTeam": "mehrdad_samadie@yahoo.com"
+    }
+  }
+}

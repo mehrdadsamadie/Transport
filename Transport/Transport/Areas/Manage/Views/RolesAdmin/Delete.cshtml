@@ -1,0 +1,48 @@
+﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityRole
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "حذف نقش";
+}
+
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <a href="/" class="navbar-brand-title">حذف نقش</a>
+            <h5 class="col-md-12">آیا مایل به حذف این نقش می باشید ؟</h5>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <table class="table table-hover">
+                       
+                        <tbody>
+                            <tr>
+                                <td> نام نقش</td>
+                                <td>@Html.DisplayFor(model => model.Name)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-md-12">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-actions no-color">
+                                <input type="submit" value="حذف" class="btn btn-danger" /> 
+
+                            </div>
+                        }
+                    </div>
+                </div>
+               <div class="Gotoback">
+                   @Html.ActionLink("بازگشت به لیست قبلی", "Index")
+                   <i class="fa fa-arrow-left"></i>
+               </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

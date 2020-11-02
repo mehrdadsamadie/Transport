@@ -1,0 +1,111 @@
+﻿<form name="form" ng-submit="createShipment()">
+    <div id="cnt" style="height:81px">
+        <article style="width:30%;float:left">
+            <!--<span ng-click="pervyear()">
+                <span>+</span>
+            </span>-->
+            <input type="text" ng-model="pyear" />
+            <!--<span ng-click="nextyear()">
+                <span>-</span>
+            </span>-->
+        </article>
+        <article style="width:30%;float:left">
+            <!--<span ng-click="pervmonth()">
+                <span>+</span>
+            </span>-->
+            <select>
+                <option></option>
+            </select>
+            <input type="text" ng-model="pmonth" />
+            <!--<span ng-click="nextmonth()">
+                <span>-</span>
+            </span>-->
+        </article>
+        <article style="width:30%;float:left">
+            <select>
+                <option ng-repeat="x in daysofMonth  track by $index"
+                        ng-class="pday==x? 'nowdate' : (x==todayD && pmonth==todayM && pyear==todayY?'today':'')" ng-click="getday('persianCalendar1',x)" value="{{x}}">
+                    {{x}}
+                </option>
+            </select>
+        </article>
+        <hr/>
+
+
+        <!--<input id="persianCalendar1" name="shipmentDate"
+               ng-pattern="/[0-9]{4}(\/|-)(0[1-9]|1[0-2])(\/|-)(0[1-9]|[1-2][0-9]|3[0-1])$/"
+               required type="text" gdate="" ng-change="inputChanged()"
+               ng-model="modeldate" placeholder="YYYY/MM/DD" ng-class="!form.$valid? 'notvalidpattern' : 'validpattern'" />-->
+        <!--<span ng-show="form.shipmentDate.$error.required">*</span>
+        <span ng-show="form.shipmentDate.$error.pattern ">!</span>-->
+        <!--<input class="btn-primary" ng-hide="!form.$valid" type="submit" value="Create">-->
+        <!--<i class="icon ion-android-calendar" ng-click="ShowHide('this')"></i>-->
+
+    </div>
+</form>
+
+
+<!--<div class="pupcalc" ng-show="IsVisible">
+    <div class="calender">
+        <div class="header-cal">
+            <div class="year-cal">
+                <div ng-click="pervyear()">
+                    <span>+</span>-->
+<!--<i class="ion-ios-arrow-back" aria-hidden="true"></i>-->
+<!--</div>
+<input type="text" ng-model="pyear" />
+<div ng-click="nextyear()">
+    <span >-</span>-->
+<!-- <i class="ion-ios-arrow-forward" aria-hidden="true"></i>-->
+<!--</div>
+</div>
+<div class="clear"></div>
+<div class="month-cal">
+    <div ng-click="pervmonth()">
+        <span style="color:#fff">+</span>-->
+<!--  <i class="ion-ios-arrow-back" aria-hidden="true"></i>-->
+<!--</div>
+<input type="text" ng-model="pmonth" />
+<div ng-click="nextmonth()">
+    <span style="color:#fff">-</span>-->
+<!--<i class="ion-ios-arrow-forward" aria-hidden="true"></i>-->
+<!--</div>
+    </div>
+</div>
+<table>-->
+<!--<thead>
+    <tr>
+        <th>شنبه</th>
+        <th>یکشنبه</th>
+        <th>دوشنبه</th>
+        <th>سه شنبه</th>
+        <th>چهارشنبه</th>
+        <th>پنج شنبه</th>
+        <th>جمعه</th>
+    </tr>
+</thead>
+<tfoot>
+    <tr>
+        <td colspan="3">
+            <div ng-click="Today('persianCalendar1')" style="color:#5bc0de">امروز</div>
+        </td>
+        <td colspan="4" style="color:#5cb85c">
+            <div ng-click="close()">بستن</div>
+        </td>
+    </tr>
+</tfoot>-->
+<!--<tbody>
+    <tr>
+
+    </tr>-->
+<!--<tr ng-repeat="x in calendar  track by $index">
+    <td ng-repeat="y in x  track by $index"
+        ng-class="pday==y? 'nowdate' : (y==todayD && pmonth==todayM && pyear==todayY?'today':'')" ng-click="getday('persianCalendar1',y)">
+        {{y}}
+    </td>
+</tr>-->
+<!--</tbody>
+            </table>
+        </div>
+    </div>
+</div>-->

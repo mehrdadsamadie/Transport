@@ -1,0 +1,143 @@
+﻿@model IEnumerable<Transport.Areas.Manage.Models.DailyDriverViewModel>
+
+@{
+    var now = Tavanmand.Classes.PersianCalendarConverter.MiladiToFarsiDate(DateTime.Now, false, null);
+    ViewBag.Title = "لیست کارکرد رانندگان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/PersianDatePicker.min.css" rel="stylesheet" />
+
+<div class="content">
+    <div class="container-fluid">
+   
+        <div id="PersonnelList">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="well">
+                                <div class="col-lg-2">
+                                    <div>
+                                        <br />
+                                        @Html.ActionLink( "تعریف کارکرد جدید", "Create", null, new { @class = "btn btn-danger btn-md fa fa-plus-circle text-btn " })
+                                    </div>
+                                </div>
+                                <div id="search-filter">
+                                    <div class="dropdownselect" id="cust-groupfilter">
+                                        <input id="Date" name="Date" placeholder="تاریخ" type="text" value="" onclick="PersianDatePicker.Show(this,'@now')" />
+                                        @Html.DropDownList("  ", new SelectList(ViewBag.StatusTypes, "Value", "Text"), "وضعیت راننده", new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.DropDownList("  ", new SelectList(ViewBag.DriverTypes, "Value", "Text"), "نوع راننده", new { htmlAttributes = new { @class = "form-control" } })
+                                        <input type="button" class="btn btn-sm btn-primary cust-btn" value="جستجو" id="btnSearch" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="panel-body">
+                        <div id="card-table">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header" data-background-color="purple">
+                                        <h4 class="title">کارکردها</h4>
+                                        <p class="category">لیست کارکردهای روزانه</p>
+                                    </div>
+                                    <div id="DailyDriverList" class="card-content table-responsive">
+                                        @Html.Partial("DailyDriverList", Model)
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/Scripts/PersianDatePicker.min.js"></script>
+    <script type="text/javascript">
+
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+            $.ajax({
+                url: location.href,
+                success: function (result) {
+                    $('#DailyDriverList').html(result);
+                }
+            });
+        });
+
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { pageNumber: page, Url: url };
+                history.pushState(null, obj.pageNumber, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function search() {
+            $.ajax({
+                url: "/Manage/DailyDriver/Index?Date=" + $('#Date').val() + "&DriverTypeId=" + $('#DriverTypes').val()
+                + "&StatusTypeId=" + $('#StatusTypes').val(),
+                success: function (result) {
+                    ChangeUrl("index", "/Manage/DailyDriver/Index?Date=" + $('#Date').val() + "&DriverTypeId=" + $('#DriverTypes').val()
+                + "&StatusTypeId=" + $('#StatusTypes').val());
+                    $('#DailyDriverList').html(result);
+                }
+            });
+        }
+
+        $(function () {
+            $("#btnSearch").click(function () {
+                search();
+            });
+
+            $('body').on('click', '#DailyDriverList .pagination a', function (event) {
+                event.preventDefault();
+                console.log('page');
+                var Date = $('#Date').val();
+                var DriverTypeId = $('#DriverTypes').val();
+                var StatusTypeId = $('#StatusTypes').val();
+                var QueryString = '';
+                if (Date != undefined && Date != '') {
+                    QueryString += '&Date=' + Date;
+                }
+                if (DriverTypeId != undefined && DriverTypeId != '') {
+                    QueryString += '&DriverTypeId=' + DriverTypeId;
+                }
+                if (StatusTypeId != undefined && StatusTypeId != '') {
+                    QueryString += '&StatusTypeId=' + StatusTypeId;
+                }
+
+                var url = $(this).attr('href') + QueryString;
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    success: function (result) {
+                        ChangeUrl('index', url);
+                        $('#DailyDriverList').html(result);
+                    }
+                });
+            });
+
+
+        });
+    </script>
+
+}

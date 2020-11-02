@@ -1,0 +1,217 @@
+﻿<div class="bar bar-header bar-balanced" align-title="center">
+    <div class="buttons">
+        <button id="delkar" class="button button-icon icon ion-ios-arrow-left" ng-click="back()"></button>
+    </div>
+    <h1 class="title">تعریف درخواست جدید</h1>
+    <div class="buttons">
+        <a href="#/home">
+            <label class="button button-icon icon ion-ios-home-outline"></label>
+        </a>
+    </div>
+</div>
+
+<ion-content style="margin-top:50px;margin-bottom:24px">
+    <div class="loading" ng-show="loadprocess">Loading&#8230;</div>
+
+    <div class="alert alert-danger error">
+        <div ng-repeat="error in errors track by $index">{{error}}</div><br />
+    </div>
+    <div>
+        <ul class="list">
+            <li class="item" style="border-bottom:1px solid #ddd">
+                <label class="item item-input">
+                    <i style="font-size: 20px;padding-right: 10px;" class="ion-android-person placeholder-icon"></i>
+                    <label style="margin-right: 20px;font-size:13px" ng-bind="request.FullName"></label>
+                    <input type="text" ng-show="false" ng-model="request.PersonelId" />
+                </label>
+
+            </li>
+            <li class="item" style="direction:rtl">
+                <label>
+                    <label style="float:right" class="checkbox" ng-click="changeLocal()">
+                        <input style="float:right" ng-bind="request.IsLocal" type="checkbox" ng-checked="request.IsLocal==true" />
+                    </label>
+                    <span style="float:right;text-align:right" class="input-label">
+                        داخل شهرک
+                    </span>
+                </label>
+                <label>
+                    <label style="float:right" class="checkbox" ng-click="changeLocal()">
+                        <input style="float:right" ng-bind="request.IsLocal" type="checkbox" ng-checked="request.IsLocal==false" />
+                    </label>
+                    <span style="float:right;text-align:right" class="input-label">
+                        خارج شهرک
+                    </span>
+                </label>
+
+            </li>
+            <li class="item">
+                <div class="startdate">
+                    <input type="number" ng-model="selectedYear" class="datein" style="width:32%;height:41px;background-color:#eee" />
+                    <select class="date" style="width:33%;" data-ng-options="o.number as o.name for o in Months" data-ng-model="selectedMonth.number"></select>
+                    <select class="date" data-ng-options="day as day for  day in Days" data-ng-model="selectedDay.day"></select>
+                </div>
+                <!--<bita-presioncal ng-model="request.ServiceDate"></bita-presioncal>-->
+
+            </li>
+            <li class="item">
+
+                <label style="background-color:#f8f8f8" class="item item-input" ng-click="opnestartRequest()">
+                    <i class="icon ion-clock placeholder-icon"></i>
+                    <span class="input-label" style="text-align:right">{{request.StartTimeStr| date: "HH:mm"}}</span>
+                </label>
+
+            </li>
+            <li class="item">
+                <ion-list ng-repeat="item in ServiceTypes">
+                    <ion-radio ng-model="request.ServiceTypeId" ng-value="item.Value">{{item.Text}}</ion-radio>
+                </ion-list>
+            </li>
+
+            <li class="item" style="direction:rtl">
+                <label class="checkbox" style="float:right" ng-click="changeEmergancy()">
+                    <input ng-bind="request.IsEmergancy" type="checkbox" ng-checked="request.IsEmergancy==true" />
+                </label>
+                <span class="input-label" style="text-align:right">
+                    ضروری
+                </span>
+            </li>
+            <li class="item">
+                <label class="item item-input">
+                    <i style="font-size: 20px;padding-right: 10px;" class="ion-android-radio-button-on placeholder-icon"></i>
+                    <span style="margin-right:20px;direction:rtl">تعداد همراهان:</span>
+                    <input type="number" ng-model="request.GussetNumber" autofocus />
+                </label>
+            </li>
+            <li class="item">
+                <label class="item item-input">
+                    <i style="font-size: 20px;padding-right: 10px;" class="ion-chatbox-working placeholder-icon"></i>
+                    <input type="text" placeholder="توضیحات مورد نظر را وارد نمایید." ng-model="request.Description" />
+                </label>
+            </li>
+            <li>
+                <div class="mstabs">
+                    <ul class="parenttab">
+                        <li class="tbtab" ng-class="{true: 'act', false: 'noact'}[viewSelected==0]" ng-click="locationshow(0)">آدرس مبداء</li>
+                        <li class="tbtab" ng-class="{true: 'act', false: 'noact'}[viewSelected==1]" ng-click="locationshow(1)">آدرس مقصد</li>
+                    </ul>
+                    <div class="subtab">
+                        <div ng-show="viewSelected==0">
+                            <ul class="list" id="prplist">
+
+                                <!--<li>
+                                    <label>
+                                        <i style="font-size: 20px;" class="ion-earth placeholder-icon"></i>
+                                        <input type="text" placeholder="نام کشور را وارد نمایید..." ng-model="request.BiginningAddress.CountryName" />
+                                    </label>
+                                </li>-->
+                                <li>
+                                    <label>
+                                        <i style="font-size: 20px;padding-right: 10px;z-index:1" class="ion-flag placeholder-icon"></i>
+                                        <select ng-disabled="request.IsLocal" ng-model="request.BiginningAddress.StateId"
+                                                ng-options="State.Value as State.Text for State in States"></select>
+                                    </label>
+                                </li>
+                                <li>
+
+                                    <label>
+                                        <i style="font-size: 20px;padding-right: 10px;z-index:1" class="ion-flag placeholder-icon"></i>
+                                        <select ng-disabled="request.IsLocal" ng-model="request.BiginningAddress.EparchyId"
+                                                ng-options="item.Value as item.Text for item in Eparchies|filter:{StateId:request.BiginningAddress.StateId}">
+                                            <option value="">شهرستان مورد نظر را انتخاب نمایید...</option>
+                                        </select>
+                                    </label>
+                                </li>
+                                <li>
+                                    <i style="font-size: 20px;padding-right: 10px;margin-bottom:100px" class="ion-location placeholder-icon"></i>
+                                    <angucomplete-alt ng-model="request.BiginningAddress.Address" id="members"
+                                                      placeholder="مسیر مبداء خود را انتخاب کنید..."
+                                                      pause="400"
+                                                      selected-object="selectedBiginningAddress"
+                                                      remote-url="{{path}}Manage/Address/AutoAddress?isBegin=true&searchString="
+                                                      description-field="EparchyName"
+                                                      title-field="Address"
+                                                      input-class="form-control form-control-small" matchclass="highlight" />
+                                </li>
+                                <!--<li>
+                                    <label>
+                                        <i style="font-size: 20px;padding-right: 10px;" class="ion-qr-scanner placeholder-icon"></i>
+                                        <input type="text" placeholder="نام شهر را وارد نمایید..." ng-model="request.BiginningAddress.CityName" />
+                                    </label>
+                                </li>-->
+
+
+                            </ul>
+                        </div>
+                        <div ng-show="viewSelected==1">
+                            <ul class="list" id="prplist">
+
+                                <!--<li>
+                                    <label>
+                                        <i style="font-size: 20px;padding-right: 10px;" class="ion-earth placeholder-icon"></i>
+                                        <input type="text" placeholder="نام کشور را وارد نمایید..." ng-model="request.DestinationAddress.CountryName" />
+                                    </label>
+                                </li>-->
+                                <li>
+                                    <label>
+                                        <i style="font-size: 20px;padding-right: 10px;z-index:1" class="ion-flag  placeholder-icon"></i>
+                                        <select ng-disabled="request.IsLocal" ng-model="request.DestinationAddress.StateId" ng-options="item.Value as item.Text for item in States">
+                                            <option value="">استان مورد نظر را انتخاب نمایید...</option>
+                                        </select>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <i style="font-size: 20px;padding-right: 10px;z-index:1" class="ion-flag placeholder-icon"></i>
+
+                                        <select ng-disabled="request.IsLocal" ng-model="request.DestinationAddress.EparchyId" ng-options="item.Value as item.Text for item in Eparchies|filter:{StateId:request.DestinationAddress.StateId}">
+                                            <option value="">شهرستان مورد نظر را انتخاب نمایید...</option>
+                                        </select>
+
+                                    </label>
+                                </li>
+                                <li>
+                                    <i style="font-size: 20px;padding-right: 10px;margin-bottom:100px" class="ion-location placeholder-icon"></i>
+                                    <angucomplete-alt ng-model="request.DestinationAddress.Address" id="members2"
+                                                      placeholder="مسیر مقصد خود را انتخاب کنید..."
+                                                      pause="400"
+                                                      selected-object="selectedDestinationAddress"
+                                                      remote-url="{{path}}Manage/Address/AutoAddress?isBegin=false&searchString="
+                                                      description-field="EparchyName"
+                                                      title-field="Address"
+                                                      input-class="form-control form-control-small" matchclass="highlight" />
+                                </li>
+                                <!--<li>
+                                    <label>
+                                        <i style="font-size: 20px;padding-right: 10px;" class="ion-qr-scanner  placeholder-icon"></i>
+                                        <input type="text" placeholder="نام شهر را وارد نمایید..." ng-model="request.DestinationAddress.CityName" />
+                                    </label>
+                                </li>-->
+
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+
+
+    </div>
+
+
+    <div class="clear"></div>
+
+
+</ion-content>
+<ion-footer-bar class="bar-positive tabs tabs-stable">
+
+    <button ng-if="request.Editable==true" class="button button-full button-positive" ng-click="saveRequest()">
+        ثبت
+    </button>
+    <button ng-if="request.Editable==false" ng-click="backList()" class="button button-full button-positive">
+        بازگشت
+    </button>
+
+</ion-footer-bar>

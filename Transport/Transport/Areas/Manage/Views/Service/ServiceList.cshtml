@@ -1,0 +1,103 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Transport.Areas.Manage.Models.ServiseIndexView>
+<table class="table table-striped table-hover">
+    <thead class="text-primary">
+        <tr>
+            <th>
+                انتخاب
+            </th>
+            <th>
+                نام درخواست کننده
+            </th>
+            <th>
+                تاریخ
+            </th>
+            <th>
+                مبدا
+            </th>
+
+            <th>
+                مقصد
+            </th>
+            <th>
+                نوع راننده
+            </th>
+            <th>
+                نام راننده
+            </th>
+            <th>
+                وضعیت سرویس
+            </th>
+
+            <th>
+                مسیر
+            </th>
+
+            <th>
+                درخواست
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.IsAcceptTranasportManager==true ? "success" :item.IsAcceptTranasportManager==false? "danger": "")">
+                <td>
+                    <input id="changeStatus" type="checkbox" name="@item.Id" />
+                </td>
+                <td title="@item.RequestUnit">
+                    @Html.DisplayFor(modelItem => item.RequestName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Beginning)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Destination)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DriverType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceStatus)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @if (@item.RequestId != null)
+                    {
+
+                        <a class="btn btn-sm btn-warning" tabindex="0" data-toggle="popover" data-trigger="focus" data-popover-content='@("#a" + item.Id)' data-placement="top">درخواست</a>
+                        <div id='@("a" + item.Id)' class="hidden">
+                            <div class="popover-heading" direction="rtl">لیست درخواست ها</div>
+                            <div class="popover-body" direction="rtl">
+                                @foreach (var request in item.Requests)
+                                {
+                                    <a href="~/Request/Create/@request.Id">@(request.FullName + " " + request.Factory)</a>
+                                    <br />
+                                }
+                            </div>
+                        </div>
+                    }
+                </td>
+                <td class="icon-tool">
+                    @Html.ActionLink("  ", "create", new { id = item.Id }, new { @class = "btn btn-success fa fa-pencil-square-o text-info" })
+                    @*@Html.ActionLink("  ", "Details", new { id = item.Id }, new { @class = "btn btn-info fa fa-reply text-success" })*@
+                    @Html.ActionLink("  ", "Delete", new { id = item.Id }, new { @class = "btn btn-danger fa fa-times text-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { pageNumber = page }))
+
+

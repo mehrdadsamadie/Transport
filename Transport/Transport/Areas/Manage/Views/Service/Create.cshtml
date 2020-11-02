@@ -1,0 +1,682 @@
+﻿@model Transport.Areas.Manage.Models.ServiceSaveView
+
+@{
+    var now = Tavanmand.Classes.PersianCalendarConverter.MiladiToFarsiDate(DateTime.Now, false, null);
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (User.IsInRole("TranasportManager"))
+    {
+        Layout = "~/Views/Shared/_LayoutTransportManager.cshtml";
+    }
+}
+<link href="~/Content/PersianDatePicker.min.css" rel="stylesheet" />
+<link href="~/Content/timepicker/jquery.timepicker.css" rel="stylesheet" />
+<div class="content">
+    @using (Html.BeginForm("Create", "Service",new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="container-fluid">
+            <div class="col col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading" id="toolbar">
+                        <div style="float:right">
+                            <h4 class="title">تعریف سرویس جدید</h4>
+                            <p class="category">اطلاعات سرویس را وارد نمایید</p>
+                        </div>
+
+                        <div>
+                            <input type="submit" value="ذخیره" class="btn btn-success" />
+                        </div>
+
+                    </div>
+                    <div class="panel-body" id="frmcustom">
+                        <div class="panel panel-default col-md-4" id="panels">
+                            <div class="panel-body">
+                                <div class="col-lg-12">
+                                    <div class="alert alert-danger">
+                                        مبداء
+                                    </div>
+
+                                    <div class="clear"></div>
+                                    <div class="col-md-4" style="float:right;display:none">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.Biginning.CountryName, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+
+                                            @Html.HiddenFor(model => model.Biginning.CountryName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @*@Html.ValidationMessageFor(model => model.Biginning.CountryName, "", new { @class = "text-danger" })*@
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="float:right">
+                                        <label>
+                                            استان
+                                        </label>
+                                        <div class="form-group label-floating is-empty select-local-State" id="Biginning">
+                                            @Html.DropDownListFor(model => model.Biginning.StateId, new SelectList(ViewBag.States, "Value", "Text"), "استان را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Biginning.StateId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="float:right;">
+                                        <label>
+                                            شهر
+                                        </label>
+                                        <div class="form-group label-floating is-empty select-local-Eparchy" id="Biginning">
+                                            @Html.DropDownListFor(model => model.Biginning.EparchyId, new SelectList(ViewBag.Eparches, "Value", "Text"), "شهرستان را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Biginning.EparchyId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="float:right;display:none">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.Biginning.CityName, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+                                            @Html.EditorFor(model => model.Biginning.CityName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Biginning.CityName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <div class="col-md-12">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.Biginning.Address, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+                                            @Html.EditorFor(model => model.Biginning.Address, new { htmlAttributes = new { @class = "form-control", @placeholder = "آدرس ..." } })
+                                            @Html.ValidationMessageFor(model => model.Biginning.Address, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="alert alert-success">
+                                        مقصد
+                                    </div>
+                                    <div class="clear"></div>
+                                    <div class="col-md-4" style="float:right;display:none">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.Destination.CountryName, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+
+                                            @Html.HiddenFor(model => model.Destination.CountryName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @*@Html.ValidationMessageFor(model => model.Destination.CountryName, "", new { @class = "text-danger" })*@
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="float:right;">
+                                        <label>
+                                            استان
+                                        </label>
+                                        <div class="form-group label-floating is-empty select-local-State" id="Destination">
+                                            @Html.DropDownListFor(model => model.Destination.StateId, new SelectList(ViewBag.States, "Value", "Text"), "استان را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Destination.StateId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="float:right;">
+                                        <label>شهر</label>
+                                        <div class="form-group label-floating is-empty select-local-Eparchy" id="Destination">
+                                            @Html.DropDownListFor(model => model.Destination.EparchyId, new SelectList(ViewBag.Eparches, "Value", "Text"), "شهرستان را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Destination.EparchyId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="float:right;display:none">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.Destination.CityName, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+                                            @Html.EditorFor(model => model.Destination.CityName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Destination.CityName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <div class="col-md-12" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.Destination.Address, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+                                            @Html.EditorFor(model => model.Destination.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Destination.Address, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8" id="frmcustom">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.RequestId)
+                            @Html.HiddenFor(model => model.BackRequest)
+                            <div class="panel panel-info" style="margin-bottom:10px">
+                                <div class="panel-heading">نوع سرویس</div>
+                                <div class="panel-body">
+                                    <div id="myRadioGroup">
+
+                                        <div class="col-md-9">
+                                            <div id="Cars2" class="desc">
+                                                <div class="col-md-6" style="float:right">
+                                                    <div class="form-group label-floating is-empty">
+                                                        @Html.LabelFor(model => model.DriverId, htmlAttributes: new { @class = "control-label" })
+                                                        <br />
+                                                        @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control", @placeholder = "نام راننده ..." } })
+                                                        @Html.EditorFor(model => model.DriverId, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.DriverId, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div id="Cars3" class="desc" style="display: none;">
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group label-floating is-empty">
+                                                        <label class="control-label">
+                                                            @Html.LabelFor(model => model.DriverName, htmlAttributes: new { @class = "control-label" })
+                                                        </label>
+
+                                                        @Html.EditorFor(model => model.DriverName, new { htmlAttributes = new { @class = "form-control", @placeholder = "نام راننده ..." } })
+                                                        @Html.ValidationMessageFor(model => model.DriverName, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group label-floating is-empty">
+                                                        <label class="control-label">تاکسی تلفنی را انتخاب نمایید...</label>
+                                                        @Html.DropDownListFor(model => model.TaxiCompanyId, new SelectList(ViewBag.TaxiCompanies, "Value", "Text"), "تاکسی تلفنی را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.TaxiCompanyId, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            راننده :<input type="radio" name="cars" checked="checked" value="2" />
+                                            <br />
+                                            تاکسی تلفنی :<input type="radio" name="cars" value="3" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="col-md-3" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+                                            @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @placeholder = "تاریخ را وارد نمایید...", onclick = "PersianDatePicker.Show(this,'" + now + "'); " } })
+                                            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+                                            @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control StartTime", @placeholder = "زمان شروع ...", @id = "basicExample" } })
+                                            @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                زمان تقریبی پایان
+                                            </label>
+                                            @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control EndTime", @placeholder = "زمان تقریبی پایان... ", @id = "basicExample1" } })
+                                            @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.DelayTime, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+                                            @Html.EditorFor(model => model.DelayTime, new { htmlAttributes = new { @class = "form-control", @id = "basicExample2", @placeholder = "...زمان تاخیر " } })
+                                            @Html.ValidationMessageFor(model => model.DelayTime, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <hr />
+                                    <div class="col-md-3" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.IsLocal, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+                                            <div class="checkbox">
+                                                @Html.Label("بله", "بله")
+                                                @Html.RadioButtonFor(model => model.IsLocal, "true")
+                                                @Html.Label("خیر", "خیر")
+                                                @Html.RadioButtonFor(model => model.IsLocal, "false")
+                                                @Html.ValidationMessageFor(model => model.IsLocal, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label class="control-label">نوع سفر</label>
+                                            @Html.DropDownListFor(model => model.ServiceTypeId, new SelectList(ViewBag.ServiceTypes, "Value", "Text"), "نوع سفر را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ServiceTypeId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label class="control-label">وضعیت سفر</label>
+                                            @*@Html.LabelFor(model => model.DriverTypeId, htmlAttributes: new { @class = "control-label" })*@
+                                            @Html.DropDownListFor(model => model.ServiceStatusId, new SelectList(ViewBag.ServiceStatues, "Value", "Text", "1"), "وضعیت سفر را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ServiceStatusId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.GussetNumber, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+
+                                            @Html.EditorFor(model => model.GussetNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "تعداد همراهان... " } })
+                                            @Html.ValidationMessageFor(model => model.GussetNumber, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <hr />
+                                    <div class="col-md-3" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label class="control-label">نوع راننده</label>
+                                            @*@Html.LabelFor(model => model.DriverTypeId, htmlAttributes: new { @class = "control-label" })*@
+                                            @Html.DropDownListFor(model => model.DriverTypeId, new SelectList(ViewBag.DriverTypes, "Value", "Text"), "نوع راننده را در این مسیر انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.DriverTypeId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label class="control-label">
+                                                مسیر
+                                            </label>
+                                            @*<label>
+                                                @Html.LabelFor(model => model.PathId, htmlAttributes: new { @class = "control-label" })
+                                                </label>*@
+                                            @Html.DropDownListFor(model => model.PathId, new SelectList(ViewBag.Pathes, "Value", "Text"), "مسیر را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.PathId, "", new { @class = "text-danger" })
+                                            @*<input type="button" value="راهنما" onclick="getPathAndWay()"/>
+                                            <div id="waies"></div>*@
+
+                                         
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1" style="float:right">
+                                        <button type="button" id="btnhelper" value="راهنما" class="fa fa-question-circle-o btn" onclick="getPathAndWay()" data-toggle="modal" data-target="#myModal">راهنما</button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade tabpath" id="myModal" role="dialog">
+                                            <div class="modal-dialog">
+
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="modal-title">مسیر ها</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div id="waies"></div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">بستن</button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.Distance, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+                                            @Html.EditorFor(model => model.Distance, new { htmlAttributes = new { @class = "form-control", @placeholder = "مسافت تقریبی ... " } })
+                                            @Html.ValidationMessageFor(model => model.Distance, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.RealDistance, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+
+                                            @Html.EditorFor(model => model.RealDistance, new { htmlAttributes = new { @class = "form-control", @placeholder = "مسافت واقعی ... " } })
+                                            @Html.ValidationMessageFor(model => model.RealDistance, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <hr />
+                                    <div class="col-md-12" style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+
+                                            @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "توضیحات ..." } })
+                                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="Gotoback">
+                            @Html.ActionLink("بازگشت به لیست قبلی", "Index")
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+@section scripts
+{
+    <script src="~/Scripts/PersianDatePicker.js"></script>
+    <script src="~/Content/material.min.js"></script>
+    <script src="~/Content/material-dashboard.js"></script>
+    <script src="~/Content/timepicker/jquery.timepicker.min.js"></script>
+    <script src="~/Scripts/alex-date-time.js"></script>
+
+    <script type="text/javascript">
+        function getEparchyBiginningAddress(id) {
+            var subItems = "";
+            $.getJSON("@Url.Action("GetEparchy", "Personnel")", { id: id }, function (data) {
+                    $.each(data, function (index, item) {
+                        subItems += "<option value='" + item.Value + "'>" + item.Text + "</option>"
+                    });
+                    $("#Biginning_EparchyId").html(subItems)
+                });
+        };
+        function getEparchyDestinationAddress(id)
+        {
+                var subItems = "";
+                    $.getJSON("@Url.Action("GetEparchy", "Personnel")", { id: id }, function (data) {
+                    $.each(data, function (index, item) {
+                        subItems += "<option value='" + item.Value + "'>" + item.Text + "</option>"
+                    });
+                    $("#Destination_EparchyId").html(subItems)
+                });
+        };
+        $(document).ready(function () {
+            $("#Biginning_StateId").change(function () {
+                var val = $(this).val();
+                getEparchyBiginningAddress(val);
+            });
+            $("#Biginning_Address").autocomplete({
+                minLength: 3,
+                delay: 1000,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Manage/Address/AutoAddress",
+                        type: "POST",
+                        dataType: "json",
+                        data: { searchString: request.term, isBegin: true },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.EparchyName +" - "+ item.Address,
+                                    value: item.Address,
+                                    CityName: item.CityName,
+                                    CountryName: item.CountryName,
+                                    EparchyId: item.EparchyId,
+                                    StateId: item.StateId,
+                                    RegionName: item.RegionName,
+                                    PostalCode: item.PostalCode,
+                                    Address: item.Address
+
+                                };
+                            }))
+
+                        },
+
+                    })
+                },
+                select: function(event, ui) {
+                    $("#Biginning_CityName").val(ui.item.CityName);
+                    $("#Biginning_CountryName").val(ui.item.CountryName);
+                    $("#Biginning_EparchyId").val(ui.item.EparchyId);
+                    $("#Biginning_StateId").val(ui.item.StateId);
+                    $("#Biginning_RegionName").val(ui.item.RegionName);
+                    $("#Biginning_PostalCode").val(ui.item.PostalCode);
+                    $("#Biginning_Address").val(ui.item.Address);
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+            $("#Destination_StateId").change(function () {
+                var val = $(this).val();
+                getEparchyDestinationAddress(val);
+            });
+
+            $("#Destination_Address").autocomplete({
+                minLength: 3,
+                delay: 1000,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Manage/Address/AutoAddress",
+                        type: "POST",
+                        dataType: "json",
+                        data: { searchString: request.term, isBegin: false  },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.EparchyName + " - " +  item.Address,
+                                    value: item.Address,
+                                    CityName: item.CityName,
+                                    CountryName: item.CountryName,
+                                    EparchyId: item.EparchyId,
+                                    StateId: item.StateId,
+                                    RegionName: item.RegionName,
+                                    PostalCode: item.PostalCode,
+                                    Address: item.Address
+
+                                };
+                            }))
+
+                        },
+
+                    })
+                },
+                select: function (event, ui) {
+                    $("#Destination_CityName").val(ui.item.CityName);
+                    $("#Destination_CountryName").val(ui.item.CountryName);
+                    $("#Destination_EparchyId").val(ui.item.EparchyId);
+                    $("#Destination_StateId").val(ui.item.StateId);
+                    $("#Destination_RegionName").val(ui.item.RegionName);
+                    $("#Destination_PostalCode").val(ui.item.PostalCode);
+                    $("#Destination_Address").val(ui.item.Address);
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+
+            $("#FullName").autocomplete({
+                minLength: 3,
+                delay: 1000,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Manage/Driver/AutoPersonel",
+                        type: "POST",
+                        dataType: "json",
+                        data: { searchString: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                
+                                return { label: item.FullName, value: item.FullName, Id: item.Id, };
+                            }))
+                        }
+                    })
+                },
+                select: function (event, ui) {
+                    driverId = ui.item.Id;
+                    $("#DriverId").val(ui.item.Id);
+                    $.ajax({
+                        url: "/Manage/Service/GetDriverType",
+                        type: "POST",
+                        dataType: "json",
+                        data: { driverId: driverId },
+                        success: function (data) {
+                            if (data != null)
+                            {
+                                $("#DriverTypeId").val(data);
+                            }
+                            else
+                            {
+                                $("#DriverTypeId").val('');
+                            }
+                        },
+
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+
+            $(function () {
+                $("#TaxiCompanyId").on("change", function () {
+                    if ($(this).val() != '') {
+                        $("#drivername").show();
+                    } else {
+                        $("#drivername").hide();
+                    }
+                });
+            });
+            $(function () {
+                $('#basicExample').timepicker({
+                    'timeFormat': 'H:i',
+
+                });
+            });
+            $(function () {
+                $('#basicExample1').timepicker({ 'timeFormat': 'H:i' });
+            });
+            $(function () {
+                $('#basicExample2').timepicker({ 'timeFormat': 'H:i' });
+            });
+            $(document).ready(function () {
+                $("#basicExample").typeATime();
+
+            });
+            $(document).ready(function () {
+                $("#basicExample1").typeATime();
+
+            });
+            $(document).ready(function () {
+                $("#basicExample2").typeATime();
+
+            });
+            //});
+
+            //$('#TaxiCompanyId option').each(function() {
+            //    if (this.selected == true) {
+            //        alert('selected');
+            //        // do something
+            //    } else {
+            //        alert('noselected');
+            //        // do something
+            //    }
+            //})
+            //$('#StartTime').timepicker({
+            //    minuteStep: 1,
+            //    showInputs: false,
+            //    showMeridian: false
+            //});
+            //$('#EndTime').timepicker({
+            //    minuteStep: 1,
+            //    showInputs: false,
+            //    showMeridian: false
+            //});
+            //$('#DelayTime').timepicker({
+            //    minuteStep: 1,
+            //    showInputs: false,
+            //    showMeridian: false,
+            //});
+
+                $("input[name$='cars']").click(function () {
+                    var test = $(this).val();
+
+                    $("div.desc").hide();
+                    $("#Cars" + test).show();
+            });
+                /***********************change combo box whene onclick radio***************************/
+                $("input[name='IsLocal']").change(function () {
+                    if ($(this).val() == 'true') {
+                        getEparchyBiginningAddress(5);
+                        getEparchyDestinationAddress(5);
+                        $("#Destination_StateId").val(5);
+                        $("#Destination_EparchyId").val(640);
+                        $("#Biginning_EparchyId").val(640);
+                        $("#Biginning_StateId").val(5);
+
+                        $('#Destination_StateId').prop('disabled', 'true');
+                        $('#Destination_EparchyId').prop('disabled', 'true');
+                        $('#Biginning_EparchyId').prop('disabled', 'true');
+                        $('#Biginning_StateId').prop('disabled', 'true');
+                    }
+                    else {
+
+                        getEparchyBiginningAddress(5);
+                        getEparchyDestinationAddress(5);
+                        $("#Destination_StateId").val(5);
+                        $("#Destination_EparchyId").val(480);
+                        $("#Biginning_EparchyId").val(480);
+                        $("#Biginning_StateId").val(5);
+
+                        $('#Destination_StateId').prop('disabled', false);
+                        $('#Destination_EparchyId').prop('disabled', false);
+                        $('#Biginning_EparchyId').prop('disabled', false);
+                        $('#Biginning_StateId').prop('disabled', false);
+                    }
+                });
+
+
+        });
+
+        $(".StartTime").on("change", function () {
+            if ($("input[name='IsLocal']").val() == 'true') {
+                enddate = toDate($(".StartTime").val(), "h:m");
+                enddate = enddate.setMinutes(enddate.getMinutes() + 30);
+                uodatetime = moment(enddate).format('HH:mm');
+                $('.EndTime').val(uodatetime);
+            }
+            else {
+                $('.EndTime').val('');
+            }
+        });
+        $('document').ready(function () {
+            if ($("input[name='IsLocal']").val() == 'true') {
+                enddate = toDate($(".StartTime").val(), "h:m");
+                enddate = enddate.setMinutes(enddate.getMinutes() + 30);
+                uodatetime = moment(enddate).format('HH:mm');
+                $('.EndTime').val(uodatetime);
+            }
+            else {
+                $('.EndTime').val('');
+            }
+        });
+        function getPathAndWay()
+        {
+            $.ajax({
+                url: "/Manage/Service/GetPathAndWay",
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $("#waies").empty();
+                    var content = "<table>"
+                    for (var i = 0; i < data.length; i++) {
+                        content += "<tr id=tr_" + data[i].id + "><td>" + data[i].id + "</td><td>" + data[i].way.join(" , ") + "</td></tr>";
+
+                    }
+                    content += "</table>"
+                    $('#waies').append(content);
+                }
+            })
+        }
+    </script>
+}

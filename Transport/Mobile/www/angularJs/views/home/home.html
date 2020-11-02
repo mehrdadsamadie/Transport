@@ -1,0 +1,79 @@
+﻿<!--<div class="bar bar-header bar-balanced">
+    <h1 class="title">پروفایل کاربری </h1>
+</div>-->
+<ion-header-bar class="bar bar-header bar-balanced" align-title="center">
+    <div class="buttons" >
+        <button id="delkar"ng-click="logOff()" class="button button-icon fa fa-sign-out">
+            <span >خروج</span>
+        </button>
+       
+    </div>
+    <h1 class="title">پروفایل کاربری </h1>
+   
+   
+</ion-header-bar>
+<ion-content>
+    <div class="card" style="margin-top:0px!important">
+        <div class="item item-text-wrap">
+            <div class="list">
+                <div class="item item-divider">
+                    اطلاعات پرسنل
+                </div>
+                <div class="list" id="info">
+                    <div class="item item-icon-right">
+                        <i class="ion-android-person"></i>
+                        <span>{{personel.FullName}}</span>
+                    </div>
+
+                    <div class="item item-icon-right">
+                        <i class="ion-cube"></i>
+                        <span>{{personel.PersonnelCode}}</span>
+                    </div>
+                    <div class="item item-icon-right">
+                        <i class="ion-ios-telephone"></i>
+                        <span>{{personel.Mobile}}</span>
+                    </div>
+                    <div class="item item-icon-right">
+                        <i ng-hide="{{personel.Gender}}" class="ion-woman"></i>
+                        <i ng-show="{{personel.Gender}}" class="ion-man"></i>
+                        <span ng-show="{{personel.Gender}}">مرد</span> <span ng-hide="{{personel.Gender}}">زن</span>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        </div>
+</ion-content>
+
+<div class="tabs-striped tabs-color-assertive">
+
+    <div class="tabs" ng-if="(roles|IsInRole:'Driver') != true" >
+        <a class="tab-item active" href="#/home">
+            <span> خانه </span>
+            <i class="ion-document-text"></i>
+        </a>
+        <a class="tab-item" href="#/requestList">
+            <span>  لیست درخواست ها</span>
+            <i class="ion-folder"></i>
+        </a>
+        <a class="tab-item" href="#/requestCreate">
+            <span>  ایجاد درخواست</span>
+            <i class="ion-filing"></i>
+        </a>
+    </div>
+    <div class="tabs" ng-if="(roles|IsInRole:'Driver') == true">
+        <a class="tab-item active" href="#/home">
+            <span> خانه </span>
+            <i class="ion-document-text"></i>
+        </a>
+        <a class="tab-item" href="#/serviceDetail">
+            <span>لیست سرویس ها</span>
+            <i class="ion-folder"></i>
+        </a>
+        <a class="tab-item" href="#/serviceDetail">
+            <span>سرویس</span>
+            <i class="ion-filing"></i>
+        </a>
+    </div>
+</div>

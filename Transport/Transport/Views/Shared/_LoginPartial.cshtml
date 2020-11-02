@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNet.Identity
+@using Transport.Models
+@using Domain.Repository;
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    // using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="navbar" id="openmenu">
+            @*<li>
+                @{
+                    var manager = new UserManager<ApplicationUser>(new Microsoft.AspNet.Identity.EntityFramework.UserStore<ApplicationUser>(new ApplicationDbContext()));
+                    var currentUser = manager.FindById(User.Identity.GetUserId());
+                    var  PersonnelRepository = new PersonnelRepository();
+                    var Name = PersonnelRepository.GetById(currentUser.PersonnelId.Value).FullName;
+                }
+                @Html.ActionLink("سلام " + Name+ " !", "Index", "Home", new { area = "" }, htmlAttributes: new { title = "Manage" })
+            </li>*@
+            <li style=" border-bottom:1px solid #ddd">
+                <i class="fa fa-exchange" aria-hidden="true"></i>
+                @Html.ActionLink("تغییر رمز عبور", "ChangePassword", "EditAccount", new { area = "" }, htmlAttributes: new { id = "loginLink" })
+            </li>
+            <li><i class="fa fa-sign-out" aria-hidden="true"></i><a href="javascript:document.getElementById('logoutForm').submit()">خروج</a></li>
+           
+        
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+
+        <li>@Html.ActionLink("Log in", "Login", "Account", new { area = "" }, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

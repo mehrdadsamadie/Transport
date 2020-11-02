@@ -1,0 +1,58 @@
+﻿@model Transport.Areas.Manage.Models.DistanceSave
+
+@{
+    ViewBag.Title = "ایجاد مسافت جدید";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    @using (Html.BeginForm("Create", "Distance", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="container-fluid">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div style="float:right">
+                            <h4 class="title">تعریف مسافت جدید</h4>
+                            <p class="category">اطلاعات مسافت را وارد نمایید</p>
+                        </div>
+                        <div>
+                            <input type="submit" value="ذخیره" class="btn btn-success" />
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="card">
+                            <div class="card-content">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="col-md-12">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.kilometer, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+
+                                        @Html.EditorFor(model => model.kilometer, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.kilometer, "", new { @class = "text-danger" })
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="Gotoback">
+                    @Html.ActionLink("بازگشت به لیست قبلی", "Index")
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section scripts
+{
+    <script src="~/Content/material.min.js"></script>
+    <script src="~/Content/material-dashboard.js"></script>
+}
+

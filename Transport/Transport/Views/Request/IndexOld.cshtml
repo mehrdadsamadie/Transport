@@ -1,0 +1,401 @@
+﻿@model IEnumerable<Transport.Models.RequestViewModelIndex>
+@using Transport.Models
+
+@{
+    var now = Tavanmand.Classes.PersianCalendarConverter.MiladiToFarsiDate(DateTime.Now, false, null);
+    ViewBag.Title = "لیست درخواست های کاربر";
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (User.IsInRole("Transport"))
+    {
+        Layout = "~/Views/Shared/_LayoutTransport.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    }
+}
+<link href="~/Content/PersianDatePicker.min.css" rel="stylesheet" />
+<div id="overlay"></div>
+<div class="content">
+    <div class="container-fluid" ng-app="transport" ng-controller="requestCtrl">
+        <div class="row">
+            <a href="/" class="navbar-brand-title">لیست درخواست های کاربر</a>
+        </div>
+        <div id="PersonnelList" class="row">
+            <div class="col-md-12">
+                <div class="well row">
+                    <div class="col-lg-2">
+                        <div>
+                            <br />
+                            @Html.ActionLink("ایجاد درخواست", "Create", null, new { @class = "text-btn btn-tool" })
+                        </div>
+
+                    </div>
+                    <div class="col-lg-10" id="search-filter">
+                        <div class="dropdownselect" id="cust-groupfilter">
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("FactorManager") || User.IsInRole("Transport"))
+                            {
+                                @*@Html.Hidden("PersonelId");
+                                    @Html.TextBox("PersonelFilter");*@
+                                <div onclick="confirm(true)" class="btn btn-success">پذیرش</div>
+                                <div onclick="confirm(false)" class="btn btn-danger">لغو</div>
+                            }
+                            <br />
+                            <input id="startDate" name="startDate" placeholder="تاریخ شروع" type="text" value="" onclick="PersianDatePicker.Show(this,'@now')" />
+                            <input id="endDate" name="endDate" placeholder="تاریخ پایان" type="text" value="" onclick="PersianDatePicker.Show(this,'@now')" />
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("FactorManager") || User.IsInRole("Transport"))
+                            {
+                                <input type="text" id="PersonelFilter" placeholder="جستجو با نام پرسنل" value="" />
+                                @Html.Hidden("PersonelId");
+
+                            }
+                            <input type="button" class="btn btn-sm btn-primary cust-btn" value="جستجو" id="btnSearch" />
+                            @*<i class="fa fa-search sericon"></i>*@
+                            <label onclick="exportToExcel()" id="exportExcel" class="btn btn-default btn-sm btn-export"><span class="fa fa-download"></span>خروجی اکسل</label>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <h4 class="modal-title" id="exampleModalLabel">جستجوی سرویس ها</h4>
+                                        </div>
+                                        <div class="modal-body" style="padding-top:0px">
+                                            <div>
+                                                <div ng-show="showServices">
+                                                     <div class="well">
+                                                         <input type="text" id="autoService" placeholder="جستجو شماره سرویس" />
+                                                         <button ng-click="addServiceToRequest(0)" class="btn btn-sm btn-success" value="">ثبت</button>
+                                                         <input type="hidden" id="selected_ServiceId" />
+                                                         <br />
+                                                        <span>سرویس انتخابی:</span>
+                                                        
+                                                        <span class="custinput" id="selected_FullName" ></span>
+                                                        <span class="custinput" id="selected_Date"></span>
+                                                        <span class="custinput" id="selected_StartTime"></span>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div style="max-height:280px;overflow-y:scroll">
+                                                    <table class="table table-striped table-hover">
+                                                        <tbody >
+                                                            <tr ng-repeat="item in services" ng-show="showServices" ng-click="addServiceToRequest(item.Id)">
+                                                                <td>{{item.Id}}</td>
+                                                                <td>{{item.FullName}}</td>
+                                                                <td>{{item.Date}}</td>
+                                                                <td>{{item.StartTime}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="row" id="card-table">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header" data-background-color="purple">
+                                <h4 class="title">درخواست ها</h4>
+                                <p class="category">لیست درخواست های کاربر</p>
+                            </div>
+
+                            @*<div class="panel panel-default">
+                                    <div class="panel-body">
+
+                                        @Html.Partial("_MVCGridToolbar", new MVCGridToolbarModel()
+                                   {
+                                       MVCGridName = "RequestGrid",
+                                       PageSize = true,
+                                       ColumnVisibility = true,
+                                       Export = true,
+                                       GlobalSearch = true
+                                   })
+                                        @Html.MVCGrid("RequestGrid")
+                                    </div>
+                                </div>*@
+
+
+                            <div id="RequestList" class="card-content table-responsive">
+                                @Html.Partial("RequestList", Model)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+<script src="~/Scripts/PersianDatePicker.min.js"></script>
+    <script type="text/javascript">
+
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+            $.ajax({
+                url: location.href,
+                success: function (result) {
+                    $('#RequestList').html(result);
+                }
+            });
+        });
+
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { pageNumber: page, Url: url };
+                history.pushState(null, obj.pageNumber, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+        function setValu() {
+            var values = getUrlVars();
+            $('#PersonelId').val(values["RequestPersonel"] == undefined ? "" : values["RequestPersonel"]);
+            $('#startDate').val(values["startDate"] == undefined ? "" : values["startDate"]);
+            $('#endDate').val(values["endDate"] == undefined ? "" : values["endDate"]);
+            if ($('#PersonelId').val() != "") {
+                $.ajax({
+                    url: "/Request/GetPersonById",
+                    data:
+                        {
+                            id: parseInt(values["RequestPersonel"])
+                        },
+                    success: function (result) {
+                        if (result != null) {
+                            $('#PersonelFilter').val(result);
+                        }
+                    }
+                });
+            }
+        }
+        function search() {
+            var PersonelID = $('#PersonelFilter').val() == '' || $('#PersonelFilter').val() == null || $('#PersonelFilter').val() == undefined ? '' : $('#PersonelId').val();
+            $.ajax({
+                url: "/request/Index?RequestPersonel=" + PersonelID + '&startDate=' + $('#startDate').val() + "&endDate=" + $("#endDate").val(),
+                success: function (result) {
+                    ChangeUrl("index", "/request/Index?RequestPersonel=" + PersonelID + '&startDate=' + $('#startDate').val() + "&endDate=" + $("#endDate").val());
+                    $('#RequestList').html(result);
+                }
+            });
+        }
+
+        $("#PersonelFilter").autocomplete({
+            minLength: 3,
+            delay: 1000,
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Manage/Personnel/AutoPersonel",
+                    type: "POST",
+                    dataType: "json",
+                    data: { searchString: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.FullName,
+                                value: item.FullName,
+                                Id: item.Id
+                            };
+                        }))
+
+                    },
+
+                })
+            },
+            select: function (event, ui) {
+                $("#PersonelId").val(ui.item.Id);
+            },
+            messages: {
+                noResults: "", results: ""
+            },
+        });
+
+        $("#autoService").autocomplete({
+            minLength: 3,
+            delay: 1000,
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Request/AutoService",
+                    type: "POST",
+                    dataType: "json",
+                    data: { searchStr: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.Id,
+                                value: item.Id,
+                                Id: item.Id,
+                                FullName: item.FullName,
+                                StartTime: item.StartTime,
+                                Date: item.Date,
+                            };
+                        }))
+
+                    },
+
+                })
+            },
+            select: function (event, ui) {
+                $("#selected_ServiceId").val(ui.item.Id);
+                $("#selected_FullName").text(ui.item.FullName);
+                $("#selected_Date").text(ui.item.Date);
+                $("#selected_StartTime").text(ui.item.StartTime);
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+        $(function () {
+            $("#btnSearch").click(function () {
+
+                search();
+            })
+        });
+
+        $('body').on('click', '#RequestList .pagination a', function (event) {
+            event.preventDefault();
+            console.log('page');
+            var PersonelId = $("#PersonelId").val();
+            var QueryString = '';
+            if (PersonelId != undefined && PersonelId != '') {
+                QueryString += '&RequestPersonel=' + PersonelId;
+            }
+            var startDate = $("#startDate").val();
+            if (startDate != undefined && startDate != '') {
+                QueryString += '&startDate=' + startDate;
+            }
+            var endDate = $("#endDate").val();
+            if (endDate != undefined && endDate != '') {
+                QueryString += '&endDate=' + endDate;
+            }
+            var url = $(this).attr('href') + QueryString;
+            console.log(url);
+            $.ajax({
+                url: url,
+                success: function (result) {
+                    ChangeUrl('index', url);
+                    $('#RequestList').html(result);
+                }
+            });
+        });
+
+        function confirm(isAccept) {
+            var selected = [];
+
+
+            $('tr td #confirmbox').each(function () {
+                if ($(this).is(":checked")) {
+                    selected.push(parseInt($(this).attr('name')));
+                }
+            });
+            if (selected.length < 1) {
+                alert("رکوردی انتخاب نشده است");
+                return;
+            }
+            $.ajax({
+                url: "/request/Confirm",
+                traditional: true,
+                data:
+                    {
+
+                        isAccept: isAccept,
+                        requests: selected
+
+                    },
+                success: function (result) {
+                    if (result.result == true) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert(result.Message);
+                    }
+                }
+            });
+        }
+        $(document).ready(function () {
+            setValu();
+            exportToExcel = function () {
+                var PersonelID = $('#PersonelFilter').val() == '' || $('#PersonelFilter').val() == null || $('#PersonelFilter').val() == undefined ? '' : $('#PersonelId').val();
+                window.location = "/Request/ExportData?RequestPersonel=" + PersonelID + '&startDate=' + $('#startDate').val() + "&endDate=" + $("#endDate").val();
+            }
+        });
+        var app = angular.module("transport", []);
+        app.controller("requestCtrl", function ($scope, $http) {
+            $scope.showServices = false;
+            $scope.requestId;
+            $scope.getActiveServices = function (id) {
+                $(window).scrollTop(0);
+                $scope.showServices = true;
+                $scope.requestId = id;
+                $http({
+                    url: '/Request/GetActiveServices',
+                    method: 'Post',
+
+                }).then(function (success) {
+                    if (success.data != null) {
+                        $scope.services = success.data;
+
+                    }
+                }, function (error) {
+                    $scope.showServices = false;
+                    $('.modal').css("display","none")
+                });
+            };
+            $scope.addServiceToRequest = function (beforeserviceId) {
+                if (beforeserviceId == 0) {
+                    beforeserviceId = $("#selected_ServiceId").val()
+                }
+                $scope.showServices = false;
+                $('.modal').css("display", "none")
+                $http({
+                    url: '/Request/AddServiceToRequest',
+                    method: 'Post',
+                    data: {
+                        requestId: parseInt($scope.requestId),
+                        serviceId: parseInt(beforeserviceId)
+                    },
+                }).then(function (success) {
+                    if (success.data.Result == true) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert(success.data.Message);
+                    }
+                    $scope.requestId = null;
+                }, function (error) {
+                    $scope.requestId = null;
+                });
+            };
+        });
+ 
+       
+    </script>
+}

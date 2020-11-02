@@ -1,0 +1,86 @@
+﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityRole
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "جزییات نقش ها";
+}
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <a href="/" class="navbar-brand-title">جزییات نقش </a>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="col-md-12 table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                      نام نقش
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                       @Html.DisplayFor(model => model.Name)
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="card card-plain">
+                    <div class="card-header" data-background-color="purple">
+                        <h4 class="title">کاربران </h4>
+                        <p class="category">همه کاربرانی که در این نقش هستند.</p>
+                    </div>
+
+                    @if (ViewBag.UserCount == 0)
+            {
+                        <hr />
+                        <p>هیچ فردی در این نقش قرار ندارد.</p>
+                    }
+
+                    <div class="card-content table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <td>نام کاربری</td>
+                                    <td></td>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.Users)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.UserName
+                                        </td>
+                                        <td class="icon-tool">
+                                            @Html.ActionLink("  ", "Edit", new { id = Model.Id }, new { @class = "fa fa-pencil-square-o text-info btn btn-success " })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="Gotoback">
+                    @Html.ActionLink("بازگشت به لیست قبلی", "Index")
+                    <i class="fa fa-arrow-left"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

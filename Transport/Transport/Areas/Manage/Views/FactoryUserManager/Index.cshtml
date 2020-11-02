@@ -1,0 +1,222 @@
+﻿@model IEnumerable<Transport.Areas.Manage.Models.FactoryUserManagerViewIndex>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "لیست واحدها";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div id="FactoryUserManagerList1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="col-md-12">
+                       
+                            <div class="col-lg-2">
+                               
+                                    @Html.ActionLink("ایجاد مدیر جدید", "Create", null, new { @class = "btn btn-danger btn-md fa fa-plus-circle text-btn " })
+                               
+                            </div>
+                            <div id="search-filter">
+                                <div class="dropdownselect" id="cust-groupfilter">
+                                    <input id="SearchString" placeholder="جستجو با نام پرسنل" name="SearchString" type="text" value="" />
+
+                                    @*<i class="fa fa-search"></i>*@
+
+                                    @*@Html.Editor("SearchString", new { htmlAttributes = new { @class = "form-control" } })*@
+                                    @Html.DropDownList("FactoryId", new SelectList(ViewBag.Factories, "Value", "Text"), "کارخانه را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.DropDownList("FactoryUnitId", new SelectList(ViewBag.FactoryUnits, "Value", "Text"), " واحد کارخانه را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                    <input type="hidden" id="PersonnelId" />
+                                    پاک شده ها: <input id="isDelete" type="checkbox" />
+                                    <input type="button" class="btn btn-sm btn-primary cust-btn" id="btnSearch" value="جستجو" />
+
+                                </div>
+                          
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div id="card-table">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header" data-background-color="purple">
+                                    <h4 class="title">واحدها </h4>
+                                    <p class="category">لیست واحدهای شرکت</p>
+                                </div>
+                                <div id="FactoryUserManagerList" class="card-content table-responsive">
+                                    @Html.Partial("FactoryUserManagerList", Model)
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            
+
+            
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+            $.ajax({
+                url: location.href,
+                success: function (result) {
+                    $('#FactoryUserManagerList').html(result);
+                }
+            });
+        });
+
+        $(function () {
+
+            $("#FactoryId").change(function () {
+                var val = $(this).val();
+                var subItems = "";
+                $.getJSON("@Url.Action("GetFactoryUnit", "Personnel")", { id: val }, function (data) {
+                    $.each(data, function (index, item) {
+                        subItems += "<option value='" + item.Value + "'>" + item.Text + "</option>"
+                    });
+                    $("#FactoryUnitId").html(subItems)
+                });
+            });
+        });
+
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { pageNumber: page, Url: url };
+                history.pushState(null, obj.pageNumber, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function search() {
+            $.ajax({
+                url: "/Manage/FactoryUserManager/Index?searchString=" + $('#SearchString').val() + "&factoryUnitId=" + $('#FactoryUnitId').val() + "&isDelete=" + $('#isDelete').is(":checked"),
+                success: function (result) {
+                    ChangeUrl("index", "/Manage/FactoryUserManager/Index?searchString=" + $('#SearchString').val() + "&factoryUnitId=" + $('#FactoryUnitId').val() + "&isDelete=" + $('#isDelete').is(":checked"));
+                    $('#FactoryUserManagerList').html(result);
+                }
+            });
+        }
+
+        $(function () {
+            $("#btnSearch").click(function () {
+                search();
+            });
+
+            $("#SearchString").keypress(function (e) {
+                if (e.keyCode == 13) {
+                    search();
+                }
+            });
+            $('body').on('click', '#FactoryUserManagerList .pagination a', function (event) {
+                event.preventDefault();
+                console.log('page');
+                var QueryString = '';
+                var searchString = $('#SearchString').val();
+                var factoryUnitId = $('#FactoryUnitId').val();
+                var isDelete = $('#isDelete').is(":checked");
+
+                if (searchString != undefined && searchString != '') {
+                    QueryString += '&searchString=' + searchString;
+                }
+                if (factoryUnitId != undefined && factoryUnitId != '') {
+                    QueryString += '&factoryUnitId=' + factoryUnitId;
+                }
+                if (isDelete != undefined && isDelete != '') {
+                    QueryString += '&isDelete=' + isDelete;
+                }
+                var url = $(this).attr('href') + QueryString;
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    success: function (result) {
+                        ChangeUrl('index', url);
+                        $('#FactoryUserManagerList').html(result);
+                    }
+                });
+            });
+        });
+        function setValu() {
+            var values = getUrlVars();
+            $('#SearchString').val(values["searchString"] == undefined ? "" : decodeURI(values["searchString"]));
+            if (values["isActive"] != undefined) {
+                if (values["isActive"] === 'false') {
+                    $('#isActive').removeAttr('checked');
+                }
+                else {
+                    $('#isActive').prop({ 'checked': true });
+                }
+            }
+            else {
+                $('#isActive').prop({ 'checked': true });
+            }
+            if (values["isDelete"] != undefined) {
+                if (values["isDelete"] === 'true') {
+                    $('#isDelete').prop("checked", "true");
+                }
+                else {
+                    $('#isDelete').removeAttr('checked');
+                }
+            }
+            else {
+                $('#isDelete').removeAttr('checked');
+            }
+
+        }
+        $(document).ready(function () {
+
+            $("#SearchString").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Manage/Personnel/AutoPersonel",
+                        type: "POST",
+                        dataType: "json",
+                        data: { searchString: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                $("#PersonnelId").val(item.Id);
+                                return { label: item.FullName, value: item.FullName };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+
+            $('#FactoryUnitId option').hide();
+            $('#FactoryId').change(function () {
+                if ($(this).val() != "") {
+                    $('#FactoryUnitId option').show();
+
+                }
+                else {
+                    $('#FactoryUnitId option').remove();
+                    $('#FactoryUnitId').append($('<option>', {
+                        text: 'واحد کارخانه را انتخاب کنید'
+                    }));
+                }
+            });
+        })
+    </script>
+
+}

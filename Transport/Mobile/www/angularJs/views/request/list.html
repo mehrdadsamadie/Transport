@@ -1,0 +1,389 @@
+﻿<link href="css/bootstrap.min.css" rel="stylesheet" />
+<script src="css/bootstrap.min.js"></script>
+<style>
+    .header .col {
+        background-color: lightgrey;
+    }
+
+    .col {
+        border: solid 1px grey;
+        border-bottom-style: none;
+        border-right-style: none;
+    }
+
+        .col:last-child {
+            border-right: solid 1px grey;
+        }
+
+    .row:last-child .col {
+        border-bottom: solid 1px grey;
+    }
+
+    .filter {
+        display: none !important;
+        position: absolute;
+        top: 0px;
+        background-color: #e8e8e8;
+        border-top: 1px solid rgb(238, 238, 238);
+        margin-top: 0px;
+        display: block;
+        right: 20px;
+        z-index: 999;
+        box-shadow: rgb(221, 221, 221) 1px 1px 4px !important;
+        width: 200px;
+        top: 8px;
+        padding-bottom: 16px
+    }
+
+        .filter.active {
+            display: block !important;
+        }
+
+        .filter input {
+            float: right
+        }
+
+        .filter .checkbox input, .filter .checkbox-icon {
+            width: 20px !important;
+            height: 20px !important;
+            float: right;
+            position: relative
+        }
+
+        .filter p {
+            color: #000;
+            font-family: BYekan;
+            font-size: 13px;
+            position: relative;
+            text-align: right;
+            line-height: 0px;
+            margin-right: 35px
+        }
+
+
+        .filter .checkbox input:after, .filter .checkbox-icon:after {
+            top: 31%;
+            left: 25%;
+            width: 10px;
+            height: 6px;
+        }
+</style>
+<ion-header-bar class="bar bar-header bar-balanced" align-title="center">
+    <div class="groupbar">
+        <div class="buttons">
+            <button id="delkar" class="button button-icon icon ion-ios-minus-outline"
+                    ng-click="data.showDelete = !data.showDelete; data.showReorder = false">
+                <span>حذف   </span>
+            </button>
+            <button style="margin-left:60px" class="button button-icon ion-ios-help-outline" id="btnhelp">
+                <span style="font-family:BYekan">راهنما</span>
+            </button>
+        </div>
+        <label class="title1">لیست  درخواستها</label>
+        <div class="acfilter">
+            <label class="showfilter">
+                فیلتر
+                <button class="button button-icon ion-gear-a" id="open"></button>
+            </label>
+        </div>
+    </div>
+</ion-header-bar>
+
+<ion-content>
+    <div class="filter">
+        <div class="gb_ga"></div>
+        <div class="filterbar">وضعیت تایید نقلیه</div>
+        <ul>
+            <li ng-repeat="item in status" style="direction:rtl">
+                <label ng-click="changeStatus(false,item.lable)" class="checkbox">
+                    <input ng-checked="checkedstatus(false,item.lable)" type="checkbox" />
+                </label>
+                <p>
+                    {{item.value}}
+                </p>
+            </li>
+        </ul>
+        <div class="filterbar">وضعیت تایید مدیر</div>
+        <ul>
+            <li ng-repeat="item in status" style="direction:rtl">
+                <label ng-click="changeStatus(true,item.lable)" class="checkbox">
+                    <input ng-checked="checkedstatus(true,item.lable)" type="checkbox" />
+                </label>
+                <p>
+                    {{item.value}}
+                </p>
+            </li>
+            <!--<li style="direction:rtl">
+
+                <label class="checkbox">
+                    <input type="checkbox" />
+                </label>
+                <p>
+                    همه
+                </p>
+            </li>
+            <li style="direction:rtl">
+
+                <label class="checkbox">
+                    <input type="checkbox" />
+                </label>
+                <p>
+                    تایید شده ها
+                </p>
+            </li>
+            <li style="direction:rtl">
+
+                <label class="checkbox">
+                    <input type="checkbox" />
+                </label>
+                <p>
+                    تایید شده ها
+                </p>
+            </li>
+            <li>
+                <label class="checkbox">
+                    <input type="checkbox" />
+                </label>
+                <p>
+                    بررسی نشده ها
+                </p>
+            </li>-->
+        </ul>
+
+    </div>
+    <!-- Modal -->
+    <div class="modal" id="myModal1">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <div class="toolapp">
+                        <span>   سفر ضروری</span>
+                        <i class="btn btn-circle btn-primary ion-android-notifications"></i>
+                    </div>
+                    <div class="toolapp">
+                        <span>تایید مدیریت</span>
+                        <i class="btn btn-circle btn-info fa fa-user"></i>
+                    </div>
+                    <div class="toolapp">
+                        <span>تایید مدیر نقلیه</span>
+                        <i class="btn btn-circle btn-success fa fa-road"></i>
+                    </div>
+                    <div class="toolapp">
+                        <span>سفر داخلی</span>
+                        <i class="btn btn-circle btn-warning fa fa-industry"></i>
+                    </div>
+                    <div class="toolapp">
+                        <span>سفر خارجی</span>
+                        <i class="btn btn-circle btn-danger fa fa-globe"></i>
+                    </div>
+                </div>
+                <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">بستن</button>
+                </div>-->
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <!--<bita-presioncal ng-model="filter.startDate"></bita-presioncal>
+        <bita-presioncal ng-model="filter.endDate"></bita-presioncal>-->
+        <div class="startdate">
+            <input type="number" ng-model="selectedYearStart" class="datein" style="width:20%;height:41px;background-color:#eee" />
+            <select class="date" data-ng-options="o.number as o.name for o in Months" data-ng-model="selectedMonthStart.number"></select>
+            <select class="date" data-ng-options="day as day for day in Days" data-ng-model="selectedDayStart.day"></select>
+            <label  class="datelbl"> از تاریخ :</label>
+        </div>
+
+        <div class="enddate">
+            <input type="number" ng-model="selectedYearEnd" class="datein" style="width:20%;height:41px;background-color:#eee" />
+            <select class="date" data-ng-options="o.number as o.name for o in Months" data-ng-model="selectedMonthEnd.number"></select>
+            <select class="date"data-ng-options="day as day for  day in Days" data-ng-model="selectedDayEnd.day"></select>
+
+            <label class="datelbl" > تا تاریخ:</label>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div class="card" style="margin-top: 0px!important;position: relative;top:0px;box-shadow:1px 2px 3px #ddd!important;">
+        <div class="item item-text-wrap">
+            <div>
+
+
+                <div>
+                    <button class="button button-full button-positive" ng-click="restFilter()">
+                        نمایش درخواست ها
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ion-list class="item-avatar card item-complex" typeof="card" ng-init="restFilter()" show-delete="data.showDelete" show-reorder="data.showReorder">
+        <div class="bubblingG" ng-show="load">
+            <span id="bubblingG_1">
+            </span>
+            <span id="bubblingG_2">
+            </span>
+            <span id="bubblingG_3">
+            </span>
+        </div>
+        <div class="loading" ng-show="loadprocess">Loading&#8230;</div>
+
+
+        <ion-item ng-repeat="item in requests"
+                  item="item"
+                  class="item-remove-animate" id="card-list" ng-class="item.IsLock ? 'lock':'notlock'">
+            <div>
+                <div class="col-md-1">
+                    <div id="base" ng-class="item.IsEmergancy? 'green' : 'red'">
+                        <i class="fa fa-bell" aria-hidden="true"></i>
+                        <br />
+                        <i ng-class="item.IsEmergancy?'fa fa-check':'fa fa-times'" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div id="base" ng-class="{0: 'gray2', 1: 'red',2:'green'}[item.IsAcceptManager]">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <br />
+                        <i ng-class="{0: 'fa fa-minus', 1: 'fa fa-times',2:'fa fa-check'}[item.IsAcceptManager]" aria-hidden="true"></i>
+                    </div>
+
+                </div>
+                <div class="col-md-1">
+                    <div id="base" ng-class="{0: 'gray2', 1: 'red',2:'green'}[item.IsAcceptTranasport]">
+                        <i class="fa fa-road" aria-hidden="true"></i>
+                        <br />
+                        <i ng-class="{0: 'fa fa-minus', 1: 'fa fa-times',2:'fa fa-check'}[item.IsAcceptTranasport]" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div id="base" ng-class="item.IsLocal? 'green' : 'red'">
+                        <i ng-class="item.IsLocal?'fa fa-industry':'fa fa-globe'" aria-hidden="true"></i>
+
+                        <br />
+                        <i ng-class="item.IsLocal?'fa fa-check':'fa fa-check'" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="responsive-sm row">
+                <div class="col">
+                    <i class="ion-android-contact"></i>
+                    <span>نام درخواست کننده:</span>
+                    <span>{{item.PersonelName}}</span>
+                </div>
+            </div>
+
+            <div class="row responsive-sm">
+                <div class="col">
+                    <i class="ion-clock"></i>
+                    <span>ساعت شروع:</span>
+                    <span>{{item.StartTime | date: "HH:mm"}}</span>
+                </div>
+
+                <div class="col">
+                    <i class="ion-calendar"></i>
+                    <span>تاریخ  سرویس:</span>
+                    <span>{{item.ServiceDate}}</span>
+                </div>
+                <div class="col">
+                    <i class="ion-calendar"></i>
+                    <span>تاریخ درخواست :</span>
+                    <span>{{item.RequestDate}}</span>
+                </div>
+            </div>
+
+            <div class="row responsive-sm">
+                <div class="col">
+                    <i class="ion-map"></i>
+                    <span>
+                        مقصد:
+                    </span>
+                    <span>{{item.Destination}}</span>
+                </div>
+                <div class="col">
+                    <i class="ion-location"></i>
+                    <span>مبداء:</span>
+                    <span>{{item.Biginning}}</span>
+                </div>
+
+            </div>
+
+
+            <ion-delete-button ng-if="(item.Islock!=true  && item.IsAcceptManager != true && item.IsAcceptTranasport != true && item.Deleteable==true)" class="ion-minus-circled"
+                               ng-click="deleteRequest(item.Id)">
+                <br />
+
+            </ion-delete-button>
+            <ion-option-button ng-if="item.Editable==true" ng-hide="item.Islock" class="col button-assertive calm"
+                               ui-sref="requestCreate({'Id': item.Id})">
+                ویرایش
+            </ion-option-button>
+            <ion-option-button ng-if="item.Editable==false" ng-hide="item.Islock" class="col button-assertive calm"
+                               ui-sref="requestCreate({'Id': item.Id})">
+                مشاهده
+            </ion-option-button>
+            <ion-option-button ng-if="(roles|IsInRole:'FactorManager,Admin,Transport') == true" class="col button-assertive balanced"
+                               ng-click="confirm(item.Id,true)">
+                تایید
+            </ion-option-button>
+            <ion-option-button ng-if="(roles|IsInRole:'FactorManager,Admin,Transport') == true" class="col button-assertive"
+                               ng-click="confirm(item.Id,false)">
+                لغو
+            </ion-option-button>
+            <ion-option-button class="col button-assertive positive energized"
+                               ng-click="cancel(item.Id)" ng-if="item.Cancelable==true">
+                کنسل
+            </ion-option-button>
+
+        </ion-item>
+
+    </ion-list>
+    <ion-infinite-scroll on-infinite="loadMore()"
+                         distance="20%">
+    </ion-infinite-scroll>
+
+</ion-content>
+
+<div class="tabs-striped tabs-color-assertive">
+    <div class="tabs">
+        <a class="tab-item" href="#/home">
+            <span> خانه</span>
+            <i class="ion-document-text"></i>
+
+        </a>
+        <a class="tab-item active" href="#/requestList">
+            <span>  لیست درخواست ها</span>
+            <i class="ion-folder"></i>
+        </a>
+        <a class="tab-item" href="#/requestCreate">
+            <span>  ایجاد درخواست</span>
+            <i class="ion-filing"></i>
+        </a>
+    </div>
+</div>
+<script>
+    $("#btnhelp").click(function () {
+        $('.modal').slideToggle();
+    });
+    $(".showfilter").click(function () {
+        if ($('.filter').hasClass("active")) {
+            $(".filter").removeClass("active");
+        }
+        else {
+            $(".filter").addClass("active");
+        }
+
+    });
+    $(document).click(function (e) {
+        if ($(e.target).is(".showfilter *")) {
+            return;
+        }
+        $(".filter.active").removeClass("active");
+        $("ul#submenu li.activemenu").removeClass("activemenu");
+
+    })
+</script>

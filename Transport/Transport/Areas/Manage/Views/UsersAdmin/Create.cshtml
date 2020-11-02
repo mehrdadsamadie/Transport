@@ -1,0 +1,86 @@
+﻿@model  Transport.Models.RegisterViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "ایجاد کاربر";
+}
+<div class="content">
+    @using (Html.BeginForm("Create", "UsersAdmin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="container-fluid">
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading" id="toolbar">
+                        <div style="float:right">
+                            <h4 class="title">پروفایل کاربری</h4>
+                            <p class="category">اطلاعات شخصی را وارد نمایید</p>
+                        </div>
+                        <div>
+                            <input type="submit" value="ذخیره" class="btn btn-success" />
+                        </div>
+
+                    </div>
+                    <div class="panel-body">
+                        <div class="card">
+
+                            <div class="card-content">
+                                @Html.ValidationSummary("", new { @class = "text-error" })
+                                <div class="col-md-12">
+                                    <div class="form-group label-floating is-empty">
+                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                        @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group label-floating is-empty">
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                        @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group label-floating is-empty">
+                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group" id="chcbox">
+
+                                        @foreach (var item in (SelectList)ViewBag.RoleId)
+                                        {
+
+                                            <input type="checkbox" name="SelectedRoles" value="@item.Value" class="checkbox-inline" />
+                                                @Html.Label(item.Value, new { @class = "control-label" })
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="Gotoback">
+
+                    @Html.ActionLink("بازگشت به لیست قبلی", "Index")
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+
+
+@section Scripts {
+
+    <script src="~/Content/material.min.js"></script>
+    <script src="~/Content/material-dashboard.js"></script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

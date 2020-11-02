@@ -1,0 +1,44 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Transport.Areas.Manage.Models.VehicleViewIndex>
+<table class="table">
+    <tr>
+
+        <th>
+            نام
+        </th>
+        <th>
+            پلاک
+        </th>
+        <th>
+            مشخصات خودرو
+        </th>
+        <th>
+           نوع وسیله نقلیه
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.FullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LicensePlateNum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Model)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VehicleType)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Create", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { pageNumber = page }))

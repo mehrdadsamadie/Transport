@@ -1,0 +1,96 @@
+﻿@model Transport.Areas.Manage.Models.OverTimeViewModel
+
+@{
+    var now = Tavanmand.Classes.PersianCalendarConverter.MiladiToFarsiDate(DateTime.Now, false, null);
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/PersianDatePicker.min.css" rel="stylesheet" />
+<div class="content">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="container-fluid">
+ 
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="toolbar">
+                            <div style="float:right">
+                                <h4 class="title">اضافه کاری </h4>
+                                <p class="category">اطلاعات اضافه کاری را وارد نمایید</p>
+                            </div>
+                            <div>
+                                <input type="submit" value="ذخیره" class="btn btn-success" />
+                            </div>
+
+                        </div>
+                      
+                        <div class="panel-body">
+                            <div class="card">
+
+                                <div class="card-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="col-md-12"  style="float:right">
+                                        <div class="form-group label-floating is-empty">
+                                            <label>
+                                                @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+
+                                            @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { onclick = "PersianDatePicker.Show(this,'" + now + "'); ", @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" style="float:right">
+                                        <div class="form-group label-floating is-empty" >
+
+                                                @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label" })
+              
+                                            @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { onclick = "PersianDatePicker.Show(this,'" + now + "'); ", @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+
+                                        </div>
+                                        </div>
+                                        <div class="col-md-12" style="float:right">
+                                            <div class="form-group label-floating is-empty">
+                                                <label>
+                                                    @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label" })
+                                                </label>
+                                                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group label-floating is-empty" style="float:right">
+                                                <label>
+                                                    @Html.LabelFor(model => model.IsLock, htmlAttributes: new { @class = "control-label" })
+                                                </label>
+                                                <div class="checkbox">
+
+                                                    @Html.EditorFor(model => model.IsLock)
+                                                    @Html.ValidationMessageFor(model => model.IsLock, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="Gotoback">
+                        @Html.ActionLink("بازگشت به لیست قبلی", "Index")
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                    </div>
+                </div>
+
+
+        </div>
+    }
+</div>
+
+@section scripts
+{
+    <script src="~/Content/material.min.js"></script>
+    <script src="~/Content/material-dashboard.js"></script>
+    <script src="~/Scripts/PersianDatePicker.js"></script>
+}

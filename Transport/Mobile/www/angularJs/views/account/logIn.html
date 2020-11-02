@@ -1,0 +1,42 @@
+﻿<div ng-show="showLogIn">
+    <div class="bar bar-header bar-balanced">
+        <h1 class="title" style="direction:rtl">سامانه نقلیه انتخاب (سنا)</h1>
+    </div>
+    <div>
+        <div>
+            <img id="logo" src="images/logo.png" />
+
+                        <div class="list list-inset" id="loginfrm">
+                <label class="item item-input">
+                    <i class="ion-android-person"></i>
+                    <input type="text" style="font-size:18px!important" ng-model="LoginViewModel.Email"  placeholder="نام کاربری">
+                </label>
+                <label class="item item-input">
+                    <i class="ion-android-lock"></i>
+                    <input type="password" style="font-size:18px!important" ng-model="LoginViewModel.Password" placeholder="رمز عبور">
+                </label>
+                <button class="button button-block button-positive" ng-click="sendFormLogIn()">
+                    ورود
+                </button>
+            </div>
+            <!--<div class="list">
+                <label class="item item-input">
+                    <span class="input-label">نام کاربری</span>
+                    <input type="text" ng-model="LoginViewModel.UserName" placeholder="نام کاربری">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">رمز عبور</span>
+                    <input type="password" ng-model="LoginViewModel.Password" placeholder="رمز عبور">
+                </label>
+            </div>
+            <button class="button button-block button-positive" ng-click="sendFormLogIn()">
+                ورود
+            </button>-->
+        </div>
+    </div>
+    <div class="error">
+        <span ng-repeat="error in errors">
+            {{error}}
+        </span>
+    </div>
+</div>

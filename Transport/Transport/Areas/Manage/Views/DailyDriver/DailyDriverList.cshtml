@@ -1,0 +1,86 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList< Transport.Areas.Manage.Models.DailyDriverViewModel>
+
+<table class="table table-striped table-hover">
+    <thead class="text-primary">
+        <tr>
+            <th>
+                راننده
+            </th>
+            <th>
+                تاریخ
+            </th>
+            <th>
+                زمان ورود
+            </th>
+            <th>
+                زمان خروج
+            </th>
+            <th>
+                میزان تاخیر
+            </th>
+            <th>
+                میزان تعجیل
+            </th>
+            <th>
+                میزان غیبت
+            </th>
+            <th>
+                جمع کسورات کاری
+            </th>
+            <th>
+                وضعیت فرد در روز
+            </th>
+            <th>
+                نوع موقت
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DriverName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DelayHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RushHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AbsentHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeductionsTotal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusTypeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DriverTypeName)
+                </td>
+                <td class="icon-tool">
+                    @Html.ActionLink("  ", "create", new { id = item.DriverId }, new { @class = "btn btn-success fa fa-pencil-square-o text-info" })
+                    @*@Html.ActionLink("  ", "Details", new { id = item.DriverId }, new { @class = "btn btn-info fa fa-reply text-success" })*@
+                    @Html.ActionLink("  ", "Delete", new { id = item.DriverId }, new { @class = "btn btn-danger fa fa-times text-danger" })
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { pageNumber = page }))

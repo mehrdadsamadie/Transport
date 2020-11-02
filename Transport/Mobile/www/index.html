@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!--
+        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
+        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
+    -->
+    <!-- BusDriver references -->
+    <!--<style type="text/css">
+        .well[ui-view] {
+            height: 65px;
+        }
+
+        .ui-view-container {
+            position: relative;
+        }
+
+        [ui-view].ng-enter, [ui-view].ng-leave {
+            position: absolute;
+            left: 0;
+            right: 0;
+            -webkit-transition: all .5s ease-in-out;
+            -moz-transition: all .5s ease-in-out;
+            -o-transition: all .5s ease-in-out;
+            transition: all .5s ease-in-out;
+        }
+
+        [ui-view].ng-enter {
+            opacity: 0;
+            -webkit-transform: scale3d(0.5, 0.5, 0.5);
+            -moz-transform: scale3d(0.5, 0.5, 0.5);
+            transform: scale3d(0.5, 0.5, 0.5);
+        }
+
+        [ui-view].ng-enter-active {
+            opacity: 1;
+            -webkit-transform: scale3d(1, 1, 1);
+            -moz-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+        }
+
+        [ui-view].ng-leave {
+            opacity: 1;
+            /*padding-left: 0px;*/
+            -webkit-transform: translate3d(0, 0, 0);
+            -moz-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+
+        [ui-view].ng-leave-active {
+            opacity: 0;
+            /*padding-left: 100px;*/
+            -webkit-transform: translate3d(100px, 0, 0);
+            -moz-transform: translate3d(100px, 0, 0);
+            transform: translate3d(100px, 0, 0);
+        }
+    </style>-->
+    <style>
+          .slide-left-right.ng-enter,  .slide-left-right.ng-leave {
+            position: absolute;
+            left: 0;
+            right: 0;
+            -webkit-transition: all .5s ease-in-out;
+            -moz-transition: all .5s ease-in-out;
+            -o-transition: all .5s ease-in-out;
+            transition: all .5s ease-in-out;
+            height:100%;
+        }
+
+         .slide-left-right.ng-enter {
+            opacity: 0;
+            -webkit-transform: scale3d(0.5, 0.5, 0.5);
+            -moz-transform: scale3d(0.5, 0.5, 0.5);
+            transform: scale3d(0.5, 0.5, 0.5);
+        }
+
+         .slide-left-right.ng-enter-active {
+            opacity: 1;
+            -webkit-transform: scale3d(1, 1, 1);
+            -moz-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+        }
+
+        .slide-left-right.ng-leave {
+            opacity: 1;
+            /*padding-left: 0px;*/
+            -webkit-transform: translate3d(0, 0, 0);
+            -moz-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+
+       .slide-left-right.ng-leave-active {
+            opacity: 0;
+            /*padding-left: 100px;*/
+            -webkit-transform: translate3d(100px, 0, 0);
+            -moz-transform: translate3d(100px, 0, 0);
+            transform: translate3d(100px, 0, 0);
+        }
+    </style>
+    <!--<link href="css/ionic.min.css" rel="stylesheet" />-->
+    <link href="css/index.css" rel="stylesheet" />
+    <link href="css/ionic.css" rel="stylesheet" />
+
+    <link href="css/Calstyle.css" rel="stylesheet" />
+    <link href="css/font-awesome.css" rel="stylesheet" />
+    <link href="scripts/ion-floating-menu.min.css" rel="stylesheet" />
+    <!--<link href="css/PersianDatePicker.css" rel="stylesheet" />-->
+    <!--<link href="scripts/datepicker/persianDatepicker-default.css" rel="stylesheet" />-->
+    <link href="angularJs/sources/auto/ion-autocomplete.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="angularMyApp">
+        <div class="span12 ui-view-container">
+                <div class="slide-left-right" ui-view></div>
+        
+        </div>
+    </div>
+    <!-- Cordova reference, this is added to your app when it's built. -->
+    <script src="lib/jquery.min.js"></script>
+    <script src="cordova.js"></script>
+    <script src="scripts/platformOverrides.js"></script>
+    <script src="scripts/index.js"></script>
+    <script src="scripts/jalali.js"></script>
+   <!--<script src="scripts/datepicker/PersianDatePicker.min.js"></script>-->
+   <!--<script src="scripts/datepicker/PersianDatePicker.js"></script>-->
+    <!--<script src="scripts/datepicker/persian-date-0.1.8.js"></script>-->
+
+    <script src="angularJs/sources/ionic/ionic.bundle.min.js"></script>
+    
+    <script src="scripts/ion-floating-menu.js"></script>
+
+    <script src="angularJs/sources/ionic/ionic-timepicker.bundle.min.js"></script>
+    <script src="angularJs/sources/angular/angular-animate.min.js"></script>
+    <script src="angularJs/sources/angular/angular-touch.min.js"></script>
+    <!--<script src="angularJs/sources/angular/angular.min.js"></script>
+    <script src="angularJs/sources/angular/angular-animate.min.js"></script>
+    <script src="angularJs/sources/angular/angular-sanitize.js"></script>
+    <script src="angularJs/sources/angular/angular-ui-router.js"></script>-->
+    <script src="angularJs/sources/angular/angular-local-storage.min.js"></script>
+    <script src="angularJs/sources/auto/ion-autocomplete.js"></script>
+    <script src="angularJs/sources/angular-filter.js"></script>
+    <link href="angularJs/sources/auto/angucomplete-alt.css" rel="stylesheet" />
+    <script src="angularJs/sources/auto/angucomplete-alt.js"></script>
+  <!--<script type="text/javascript" server="http://naghlieh.entekhabgroup.ir/mobileupdate/bootstrapper"
+            timeout="510000000000"
+            manifest="manifest.json"
+            src="bootstrap.js"></script>-->
+    <!--<script src="lib/cordova-app-loader-complete.js"></script>
+    <script src="lib/CordovaPromiseFS.js"></script>
+    <script type="text/javascript" src="autoupdate.js"></script>-->
+    <script src="angularJs/app/app.js"></script>
+    <script src="angularJs/service/service.js"></script>
+
+    <script src="angularJs/controller/home/homeController.js"></script>
+    <script src="angularJs/controller/account/accountController.js"></script>
+    <script src="angularJs/controller/request/requestCreateController.js"></script>
+    <script src="angularJs/controller/request/requestListController.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        // Wait for Cordova to load
+        document.addEventListener("deviceready", onDeviceReady, false);
+        var domElement = document.getElementById("angularMyApp");
+        angular.bootstrap(domElement, ["MyApp"]);
+        // Cordova is ready
+        //  onDeviceReady();
+
+        function onDeviceReady() {
+        }
+
+    </script>
+ 
+</body>
+</html>

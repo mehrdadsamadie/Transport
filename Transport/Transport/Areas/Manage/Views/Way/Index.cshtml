@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Transport.Areas.Manage.Models.WayIndex>
+@{
+    ViewBag.Title = "Index";
+
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (User.IsInRole("TranasportManager"))
+    {
+        Layout = "~/Views/Shared/_LayoutTransportManager.cshtml";
+    }
+    else if (User.IsInRole("Transport"))
+    {
+        Layout = "~/Views/Shared/_LayoutTransport.cshtml";
+    }
+}
+
+
+
+<div class="content">
+    <div class="container-fluid">
+
+        <div id="PersonnelList1">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="col-md-2">
+                            <div>
+                                @Html.ActionLink("ایجاد مسیر جدید", "Create", null, new { @class = "btn btn-danger btn-md fa fa-plus-circle text-btn " })
+                            </div>
+                        </div>
+                        <div id="search-filter">
+                            <div class="dropdownselect" id="cust-groupfilter">
+                                @Html.DropDownList("PathId", new SelectList(ViewBag.Pathes, "Value", "Text"), "کد مسیر را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="card-table">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header" data-background-color="purple">
+                                        <h4 class="title">مسیر </h4>
+                                        <p class="category">لیست  مسیر ها</p>
+                                    </div>
+                                    <div id="WayList" class="card-content table-responsive">
+                                        @Html.Partial("WayList", Model)
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+            $.ajax({
+                url: location.href,
+                success: function (result) {
+                    $('#WayList').html(result);
+                }
+            });
+        });
+
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { pageNumber: page, Url: url };
+                history.pushState(null, obj.pageNumber, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function search() {
+            $.ajax({
+                url: "/Manage/Way/Index?pathId=" + $('#PathId').val(),
+                success: function (result) {
+                    ChangeUrl("index", "/Manage/Way/Index?pathId=" + $('#PathId').val());
+                    $('#WayList').html(result);
+                }
+            });
+        }
+        $(document).ready(function () {
+
+
+            $("#PathId").change(function () {
+                search();
+            });
+        })
+    </script>
+
+}

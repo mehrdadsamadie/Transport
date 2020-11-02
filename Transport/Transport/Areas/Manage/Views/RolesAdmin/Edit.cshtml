@@ -1,0 +1,56 @@
+﻿@model  Transport.Models.RoleViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "ویرایش نقش ها";
+}
+<div class="content">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="container-fluid">
+
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"  id="toolbar">
+                            <div style="float:right">
+                                <h4 class="title">ویرایش نقش</h4>
+                                
+                            </div>
+                            <div>
+                                <input type="submit" value="ذخیره" class="btn btn-success" />
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="card">
+
+                                @Html.ValidationSummary(true)
+                                @Html.HiddenFor(model => model.Id)
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>@Html.LabelFor(model => model.Name, new { @class = "control-label" })</label>
+                                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Name)
+
+                                    </div>
+                                </div>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                <div class="Gotoback">
+                    @Html.ActionLink("بازگشت به لیست قبلی", "Index")
+                    <i class="fa fa-arrow-left"></i>
+                </div>
+            </div>
+    }
+</div>
+
+@section Scripts {
+<script src="~/Content/material.min.js"></script>
+<script src="~/Content/material-dashboard.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+}

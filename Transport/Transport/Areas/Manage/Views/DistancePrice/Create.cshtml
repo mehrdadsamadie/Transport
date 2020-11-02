@@ -1,0 +1,101 @@
+﻿@model Transport.Areas.Manage.Models.DistancePriceSave
+
+@{
+    var now = Tavanmand.Classes.PersianCalendarConverter.MiladiToFarsiDate(DateTime.Now, false, null);
+    ViewBag.Title = "ایجاد لیست قیمت مسیر";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/PersianDatePicker.min.css" rel="stylesheet" />
+<div class="content">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"  id="toolbar">
+                        <div style="float:right">
+                            <h4 class="title">تعریف قیمت مسیر</h4>
+                            <p class="category">اطلاعات مسیر و قیمت  را وارد نمایید</p>
+                        </div>
+                        <div>
+                            <input type="submit" value="ذخیره" class="btn btn-success" />
+                        </div>
+                       
+                    </div>
+                    <div class="panel-body">
+                        <div class="card">
+
+                            <div class="card-content">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                <div class="col-md-6" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label> نوع راننده</label><br />
+
+                                        @Html.DropDownListFor(model => model.DriverTypeId, new SelectList(ViewBag.DriverTypes, "Value", "Text"), "نوع راننده را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.DriverTypeId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>مسافت</label><br />
+                                        @Html.DropDownListFor(model => model.DistanseId, new SelectList(ViewBag.Distances, "Value", "Text"), "مسافت را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.DistanseId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-md-6" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+                                        @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control", onclick = "PersianDatePicker.Show(this,'" + now + "'); " } })
+                                        @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+
+                                        @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control", onclick = "PersianDatePicker.Show(this,'" + now + "'); " } })
+                                        @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-md-12" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+                                        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="Gotoback">
+                    @Html.ActionLink("بازگشت به لیست قبلی", "Index")
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                </div>
+            </div>
+  
+
+    }
+
+</div>
+
+@section scripts
+{
+    <script src="~/Content/material.min.js"></script>
+    <script src="~/Content/material-dashboard.js"></script>
+    <script src="~/Scripts/PersianDatePicker.js"></script>
+}

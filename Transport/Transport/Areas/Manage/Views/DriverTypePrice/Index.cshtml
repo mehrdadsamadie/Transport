@@ -1,0 +1,137 @@
+﻿@model IEnumerable<Transport.Areas.Manage.Models.DriverTypePriceIndex>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "لیست هزینه روزانه راننده";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div id="DriverTypePriceList">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @Html.ActionLink("ایجاد هزینه روزانه راننده", "Create", null, new { @class = "btn btn-danger btn-md fa fa-plus-circle text-btn " })
+                    </div>
+                    <div class="panel-body">
+                        <div id="card-table">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header" data-background-color="purple">
+                                        <h4 class="title">هزینه ها </h4>
+                                        <p class="category">لیست هزینه راننده ها</p>
+                                    </div>
+                                    <div id="DriverTypePriceList" class="card-content table-responsive">
+                                        @Html.Partial("DriverTypePriceList", Model)
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+            $.ajax({
+                url: location.href,
+                success: function (result) {
+                    $('#DriverTypePriceList').html(result);
+                }
+            });
+        });
+
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { pageNumber: page, Url: url };
+                history.pushState(null, obj.pageNumber, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function search() {
+            $.ajax({
+                url: "/Manage/Personnel/Index?searchString=" + $('#SearchString').val(),
+                success: function (result) {
+                    ChangeUrl("index", "/Manage/DriverTypePrice/Index?searchString=" + $('#SearchString').val());
+                    $('#DriverTypePriceList').html(result);
+                }
+            });
+        }
+
+        $(function () {
+            $("#btnSearch").click(function () {
+                search();
+            });
+
+            $("#SearchString").keypress(function (e) {
+                if (e.keyCode == 13) {
+                    search();
+                }
+            });
+            $('body').on('click', '#DriverTypePriceList .pagination a', function (event) {
+                event.preventDefault();
+                console.log('page');
+                var searchString = $('#SearchString').val();
+                if (searchString == undefined || searchString == '') {
+                    searchString = '';
+                } else {
+                    searchString = '&searchString=' + searchString;
+                }
+                var url = $(this).attr('href') + searchString;
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    success: function (result) {
+                        ChangeUrl('index', url);
+                        $('#DriverTypePriceList').html(result);
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#SearchString").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Manage/Personnel/AutoPersonel",
+                        type: "POST",
+                        dataType: "json",
+                        data: { searchString: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.FullName, value: item.FullName, id: item.id };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+}

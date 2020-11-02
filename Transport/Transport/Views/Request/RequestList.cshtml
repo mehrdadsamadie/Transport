@@ -1,0 +1,187 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Transport.Models.RequestViewModelIndex>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Recipient:</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="form-control-label">Message:</label>
+                        <textarea class="form-control" id="message-text"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Send message</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead class="text-primary">
+        <tr>
+
+            @if (User.IsInRole("FactorManager") || User.IsInRole("Admin") || User.IsInRole("Transport"))
+            {
+                <th>
+                    انتخاب
+                </th>
+            }
+
+            <th>
+                درخواست کننده
+            </th>
+            <th>
+                تاریخ
+            </th>
+            <th>
+                زمان شروع
+            </th>
+            <th>
+                مبدا
+            </th>
+            <th>
+                مقصد
+            </th>
+
+            <th>
+                محلی
+            </th>
+            <th>
+                پذیرش نقلیه
+            </th>
+            <th>
+                پذیرش مدیر
+            </th>
+
+            <th>
+                ضروری
+            </th>
+
+            <th>ابزارها</th>
+
+            @if (User.IsInRole("Admin") || User.IsInRole("Transport"))
+            {
+                <th> سرویس</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+            <tr id="@("tr"+item.Id)">
+
+                @if (User.IsInRole("FactorManager") || User.IsInRole("Admin") || User.IsInRole("Transport"))
+                {
+                    <td @("td" + item.Id)>
+                        <input type="checkbox" id="confirmbox" name="@item.Id" />
+
+                    </td>
+                }
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.PersonelName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Biginning)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Destination)
+                </td>
+                <td>
+                    @if (item.IsLocal == true)
+                    {
+                        <i class="fa fa-check text-success"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-times text-danger"></i>
+                    }
+                </td>
+                <td>
+                    @if (item.IsAcceptTranasport == true)
+                    {
+                        <i class="fa fa-check text-success"></i>
+                    }
+                    else if (item.IsAcceptTranasport == false)
+                    {
+                        <i class="fa fa-times text-danger"></i>
+                    }
+                    else if (item.IsAcceptTranasport == null)
+                    {
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                    }
+                </td>
+                <td>
+                    @if (item.IsAcceptManager == true)
+                    {
+                        <i class="fa fa-check text-success"></i>
+                    }
+                    else if (item.IsAcceptManager == false)
+                    {
+                        <i class="fa fa-times text-danger"></i>
+                    }
+                    else if (item.IsAcceptManager == null)
+                    {
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                    }
+                </td>
+                <td>
+                    @if (item.IsEmergancy == true)
+                    {
+                        <i class="fa fa-check text-success"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-times text-danger"></i>
+                    }
+                </td>
+
+                <td class="icon-tool">
+                    @Html.ActionLink("  ", "create", new { id = item.Id }, new { @class = "btn btn-success fa fa-pencil-square-o text-info" })
+                    @*@Html.ActionLink("  ", "Details", new { id = item.Id }, new { @class = "btn btn-info fa fa-reply text-success" })*@
+                    @Html.ActionLink("  ", "Delete", new { id = item.Id }, new { @class = "btn btn-danger fa fa-times text-danger" })
+                </td>
+                @if (User.IsInRole("Admin") || User.IsInRole("Transport"))
+                {
+
+                    <td>
+                        @if (item.ServiceId == null)
+                        {
+                            <div class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal" id="openPopUp" ng-click="getActiveServices(@item.Id)" name="@item.Id">انتخاب سرویس</div>
+                            @Html.ActionLink("ایجاد ", "ConvertRequestToService", "Service", new { area = "Manage", id = item.Id }, new { @class = "btn btn-sm btn-success" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("مشاهده ", "Create", "Service", new { area = "Manage", id = item.ServiceId }, new { @class = "btn btn-sm btn-info" })
+                        }
+                    </td>
+                }
+            </tr>
+
+        }
+
+    </tbody>
+</table>
+
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { pageNumber = page }))

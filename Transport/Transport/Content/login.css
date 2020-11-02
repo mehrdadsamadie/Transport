@@ -1,0 +1,94 @@
+﻿
+@font-face {
+    font-family: 'BYekan';
+    font-weight: normal;
+    src: url(../fonts/BYekan.eot?#) format('eot'), url(../fonts/BYekan.woff) format('woff'), url(../fonts/BYekan.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Calibri';
+    font-weight: normal;
+    src: url('../fonts/Calibri.eot?#') format('eot'), url('../fonts/Calibri.woff') format('woff'), url('../fonts/Calibri.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('../fonts/fontawesome-webfont.eot?v=4.6.3');
+    src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.6.3') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.6.3') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.6.3') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.6.3') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.6.3#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    vertical-align: middle;
+}
+.fa-user:before {
+    content: "\f007";
+}
+.fa-lock:before {
+    content: "\f023";
+}
+body {
+    background: #6441A5; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2a0845, #6441A5); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #2a0845, #6441A5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    font-family: BYekan;
+    font-size: 13px;
+    direction: rtl;
+}
+input.form-control {
+    margin-top:15px
+}
+.centered {
+    margin: auto;
+    display: block;
+    float: none !important;
+}
+
+#loginForm {
+    color: #000;
+    margin: auto;
+    display: block;
+    font-family: BYekan;
+    font-size: 13px;
+    direction: rtl;
+    background-color: #fff;
+    padding: 41px;
+    /*height: 550px;*/
+    position: absolute;
+    width: 100%;
+    top: 15px;
+    /* bottom: 0; */
+    left: 0;
+    right: 0;
+    border-radius: 3px;
+    box-shadow: 1px 2px 3px #000;
+    border: 1px solid #000;
+}
+
+    #loginForm h4 {
+        font-family: BYekan;
+    }
+    #loginForm input{
+        font-family:Calibri,BYekan
+    }
+.row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+.btn-login {
+    width: 100%;
+    background-color: #6d2d52;
+    color: #fff;
+    padding: 12px!important;
+    font-size: 13px!important;
+    box-shadow:1px 2px 3px #ddd;
+}
+.btn-login:hover{
+    color:#fff!important
+}

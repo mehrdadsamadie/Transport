@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F577B90D-B0EC-4147-BB68-6CA912E536EA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Domain</RootNamespace>
+    <AssemblyName>Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entity\Address.cs" />
+    <Compile Include="Entity\Bank.cs" />
+    <Compile Include="Entity\Contract.cs" />
+    <Compile Include="Entity\DailyDay.cs" />
+    <Compile Include="Entity\DailyDriver.cs" />
+    <Compile Include="Entity\DailyTime.cs" />
+    <Compile Include="Entity\DelayPrice.cs" />
+    <Compile Include="Entity\Distance.cs" />
+    <Compile Include="Entity\DistancePrice.cs" />
+    <Compile Include="Entity\Driver.cs" />
+    <Compile Include="Entity\DriverHistory.cs" />
+    <Compile Include="Entity\DriverType.cs" />
+    <Compile Include="Entity\DriverTypePrice.cs" />
+    <Compile Include="Entity\Enums.cs" />
+    <Compile Include="Entity\Eparchy.cs" />
+    <Compile Include="Entity\Factory.cs" />
+    <Compile Include="Entity\FactoryUnit.cs" />
+    <Compile Include="Entity\FactoryUserManager.cs" />
+    <Compile Include="Entity\Guaranty.cs" />
+    <Compile Include="Entity\LicensePlateType.cs" />
+    <Compile Include="Entity\ManagerPersonel.cs" />
+    <Compile Include="Entity\OverTime.cs" />
+    <Compile Include="Entity\Path.cs" />
+    <Compile Include="Entity\Personnel.cs" />
+    <Compile Include="Entity\PersonStatusType.cs" />
+    <Compile Include="Entity\RDriverDriverType.cs" />
+    <Compile Include="Entity\Request.cs" />
+    <Compile Include="Entity\SalaryDay.cs" />
+    <Compile Include="Entity\SalaryMonth.cs" />
+    <Compile Include="Entity\Service.cs" />
+    <Compile Include="Entity\ServiceStatu.cs" />
+    <Compile Include="Entity\ServiceType.cs" />
+    <Compile Include="Entity\State.cs" />
+    <Compile Include="Entity\Suggestion.cs" />
+    <Compile Include="Entity\sysdiagram.cs" />
+    <Compile Include="Entity\TaxiCompany.cs" />
+    <Compile Include="Entity\Way.cs" />
+    <Compile Include="Repository\AddRessJoin.cs" />
+    <Compile Include="Repository\DelayPriceRepository.cs" />
+    <Compile Include="Repository\DriverTypePriceRepository.cs" />
+    <Compile Include="Repository\FactoryUserManagerRepository.cs" />
+    <Compile Include="Repository\LicensePlateTypeRepository.cs" />
+    <Compile Include="Repository\ManagerPersonelRepository.cs" />
+    <Compile Include="Repository\OverTimeRepository.cs" />
+    <Compile Include="Repository\DistancePriceRepository.cs" />
+    <Compile Include="Repository\RequestRepository.cs" />
+    <Compile Include="Repository\ServiceStatuRepository.cs" />
+    <Compile Include="Repository\ServiceTypeRepository.cs" />
+    <Compile Include="Repository\SuggestionRepository.cs" />
+    <Compile Include="Repository\TaxiCompanyRepository.cs" />
+    <Compile Include="Entity\TransportContext.cs" />
+    <Compile Include="Entity\Vehicle.cs" />
+    <Compile Include="Entity\VehicleDriver.cs" />
+    <Compile Include="Entity\VehicleType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\AddressRepository.cs" />
+    <Compile Include="Repository\ContractRepository.cs" />
+    <Compile Include="Repository\DailyDayRepository.cs" />
+    <Compile Include="Repository\DailyDriverRepository.cs" />
+    <Compile Include="Repository\DailyTimeRepository.cs" />
+    <Compile Include="Repository\DistanceRepository.cs" />
+    <Compile Include="Repository\DriverHistoryRepository.cs" />
+    <Compile Include="Repository\DriverRepository.cs" />
+    <Compile Include="Repository\DriverTypeRepository.cs" />
+    <Compile Include="Repository\EparchyRepository.cs" />
+    <Compile Include="Repository\FactoryRepository.cs" />
+    <Compile Include="Repository\FactoryUnitRepository.cs" />
+    <Compile Include="Repository\PathRepository.cs" />
+    <Compile Include="Repository\PersonnelRepository.cs" />
+    <Compile Include="Repository\PersonStatusTypeRepository.cs" />
+    <Compile Include="Repository\RDriverDriverTypeRepository.cs" />
+    <Compile Include="Repository\ServiceRepository.cs" />
+    <Compile Include="Repository\StateRepository.cs" />
+    <Compile Include="Repository\VehicleDriverRepository.cs" />
+    <Compile Include="Repository\VehicleRepository.cs" />
+    <Compile Include="Repository\VehicleTypeRepository.cs" />
+    <Compile Include="Repository\WayRepository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

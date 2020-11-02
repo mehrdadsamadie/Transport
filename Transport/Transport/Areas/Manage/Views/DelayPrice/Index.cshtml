@@ -1,0 +1,149 @@
+﻿@model IEnumerable<Transport.Areas.Manage.Models.DelayPriceViewIndex>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "لیست قیمت معطلی";
+}
+
+<div class="content">
+    <div class="container-fluid">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div>
+                            <div class="col-md-2">
+                                <div>
+                                    @Html.ActionLink("ایجاد قیمت مسیر", "Create", null, new { @class = "btn btn-danger btn-md fa fa-plus-circle text-btn" })
+                                </div>
+                            </div>
+                            <div id="search-filter">
+                                <div class="dropdownselect" id="cust-groupfilter">
+                                    @Html.DropDownList("driverTypeId", new SelectList(ViewBag.DriverTypes, "Value", "Text"), "نوع راننده را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                    پاک شده ها: <input id="isDelete" type="checkbox" />
+                                    <input type="button" class="btn btn-sm btn-primary cust-btn" value="جستجو" id="btnSearch" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="card-table">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header" data-background-color="purple">
+                                        <h4 class="title">قیمت مسیر </h4>
+                                        <p class="category">لیست قیمت مسیر</p>
+                                    </div>
+
+                                    <div id="DelayPriceList" class="card-content table-responsive">
+                                        @Html.Partial("DelayPriceList", Model)
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+            $.ajax({
+                url: location.href,
+                success: function (result) {
+                    $('#DelayPriceList').html(result);
+                }
+            });
+        });
+
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { pageNumber: page, Url: url };
+                history.pushState(null, obj.pageNumber, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function search() {
+            $.ajax({
+                url: "/Manage/DelayPrice/Index?driverTypeId=" + $('#driverTypeId').val() + "&isDelete=" + $('#isDelete').is(":checked"),
+                success: function (result) {
+                    ChangeUrl("index", "/Manage/DelayPrice/Index?driverTypeId=" + $('#driverTypeId').val() + "&isDelete=" + $('#isDelete').is(":checked"));
+                    $('#DelayPriceList').html(result);
+                }
+            });
+        }
+
+        $(function () {
+            $("#btnSearch").click(function () {
+                search();
+            });
+
+            $("#SearchString").keypress(function (e) {
+                if (e.keyCode == 13) {
+                    search();
+                }
+            });
+            $('body').on('click', '#DelayPriceList .pagination a', function (event) {
+                event.preventDefault();
+                console.log('page');
+                var driverTypeId = $('#driverTypeId').val();
+                var QueryString = '';
+                var isDelete = $('#isDelete').is(":checked");
+                if (driverTypeId != undefined && driverTypeId != '') {
+                    QueryString += '&driverTypeId=' + driverTypeId;
+                }
+                if (isDelete != undefined && isDelete != '') {
+                    QueryString += '&isDelete=' + isDelete;
+                }
+                var url = $(this).attr('href') + QueryString;
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    success: function (result) {
+                        ChangeUrl('index', url);
+                        $('#DelayPriceList').html(result);
+                    }
+                });
+            });
+        });
+        function setValu() {
+            var values = getUrlVars();
+            $('#driverTypeId').val(values["driverTypeId"] == undefined ? "" : (values["driverTypeId"]));
+
+            if (values["isDelete"] != undefined) {
+                if (values["isDelete"] === 'true') {
+                    $('#isDelete').prop("checked", "true");
+                }
+                else {
+                    $('#isDelete').removeAttr('checked');
+                }
+            }
+            else {
+                $('#isDelete').removeAttr('checked');
+            }
+
+        }
+        $(document).ready(function () {
+            setValu();
+        })
+    </script>
+
+}
+
+

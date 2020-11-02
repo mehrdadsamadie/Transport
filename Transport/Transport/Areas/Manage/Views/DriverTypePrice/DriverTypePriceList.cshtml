@@ -1,0 +1,48 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Transport.Areas.Manage.Models.DriverTypePriceIndex>
+
+<table class="table table-striped table-hover">
+    <thead class="text-primary">
+        <tr>
+            <th>
+                مبلغ
+            </th>
+            <th>
+                نوع راننده
+            </th>
+            <th>
+                تاریخ شروع
+            </th>
+            <th>
+                تاریخ پایان
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DailyPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DriverTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StratDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td class="icon-tool">
+                @Html.ActionLink("  ", "create", new { id = item.Id }, new { @class = "btn btn-success fa fa-pencil-square-o text-info" })
+                @*@Html.ActionLink("  ", "Details", new { id = item.DriverId }, new { @class = "btn btn-info fa fa-reply text-success" } )*@ 
+                @Html.ActionLink("  ", "Delete", new { id = item.Id }, new { @class = "btn btn-danger fa fa-times text-danger" })
+            </td>
+        </tr>
+    }
+</table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { pageNumber = page }))

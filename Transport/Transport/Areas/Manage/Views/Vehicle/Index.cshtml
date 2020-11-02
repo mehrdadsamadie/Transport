@@ -1,0 +1,166 @@
+﻿@model IEnumerable<Transport.Areas.Manage.Models.VehicleViewIndex>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "لیست خودرو";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div id="VehiclesList1">
+            <div class="col-md-12">
+               <div class="panel panel-default">
+                   <div class="panel-heading">
+                       <div >
+                           <div class="col-md-2">
+                               @Html.ActionLink("ایجاد خودرو ", "Create", null, new { @class = "btn btn-danger btn-md fa fa-plus-circle text-btn" })
+                           </div>
+
+                           <div  id="search-filter">
+                               @*<input id="SearchString" placeholder="جستجو با نام پرسنل" name="SearchString" type="text" value="" />*@
+                               <div class="dropdownselect" id="cust-groupfilter">
+                                   فعال ها: <input id="isActive" type="checkbox" checked="checked" />
+                                   پاک شده ها: <input id="isDelete" type="checkbox" />
+                                   <input type="button" class="btn btn-sm btn-primary cust-btn" value="جستجو" id="btnSearch" />
+                                   @*<i class="fa fa-search"></i>*@
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="panel-body">
+                       <div id="card-table">
+                           <div class="col-md-12">
+                               <div class="card">
+                                   <div class="card-header" data-background-color="purple">
+                                       <h4 class="title">خودرو </h4>
+                                       <p class="category">لیست خودرو</p>
+                                   </div>
+                                   <div id="VehiclesList" class="card-content table-responsive">
+                                       @Html.Partial("VehiclesList", Model)
+                                   </div>
+                               </div>
+                           </div>
+
+                       </div>
+
+                   </div>
+               </div>
+                    
+             
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+            $.ajax({
+                url: location.href,
+                success: function (result) {
+                    $('#VehiclesList').html(result);
+                }
+            });
+        });
+
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { pageNumber: page, Url: url };
+                history.pushState(null, obj.pageNumber, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function search() {
+            $.ajax({
+                url: "/Manage/Vehicle/Index?isActive=" + $('#isActive').is(":checked") + "&isDelete=" + $('#isDelete').is(":checked"),
+                success: function (result) {
+                    ChangeUrl("index", "/Manage/Vehicle/Index?isActive=" + $('#isActive').is(":checked") + "&isDelete=" + $('#isDelete').is(":checked"));
+                    $('#VehiclesList').html(result);
+                }
+            });
+        }
+
+        $(function () {
+            $("#btnSearch").click(function () {
+                search();
+            });
+
+            $("#SearchString").keypress(function (e) {
+                if (e.keyCode == 13) {
+                    search();
+                }
+            });
+            $('body').on('click', '#VehiclesList .pagination a', function (event) {
+                event.preventDefault();
+                console.log('page');
+                var QueryString = '';
+                var searchString = $('#SearchString').val();
+                var isActive = $('#isActive').is(":checked");
+                var isDelete = $('#isDelete').is(":checked");
+
+                if (searchString != undefined && searchString != '') {
+                    QueryString += '&searchString=' + searchString;
+                }
+                if (isActive != undefined && isActive != '') {
+                    QueryString += '&isActive=' + isActive;
+                }
+                if (isDelete != undefined && isDelete != '') {
+                    QueryString += '&isDelete=' + isDelete;
+                }
+                var url = $(this).attr('href') + QueryString;
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    success: function (result) {
+                        ChangeUrl('index', url);
+                        $('#VehiclesList').html(result);
+                    }
+                });
+            });
+        });
+        function setValu() {
+            var values = getUrlVars();
+            if (values["isActive"] != undefined) {
+                if (values["isActive"] === 'false') {
+                    $('#isActive').removeAttr('checked');
+                }
+                else {
+                    $('#isActive').prop({ 'checked': true });
+                }
+            }
+            else {
+                $('#isActive').prop({ 'checked': true });
+            }
+            if (values["isDelete"] != undefined) {
+                if (values["isDelete"] === 'true') {
+                    $('#isDelete').prop("checked", "true");
+                }
+                else {
+                    $('#isDelete').removeAttr('checked');
+                }
+            }
+            else {
+                $('#isDelete').removeAttr('checked');
+            }
+
+        }
+        $(document).ready(function () {
+            setValu();
+        })
+    </script>
+
+}

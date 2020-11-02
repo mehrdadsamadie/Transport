@@ -1,0 +1,391 @@
+﻿@model Transport.Areas.Manage.Models.PersonnelSave
+
+@{
+    var now = Tavanmand.Classes.PersianCalendarConverter.MiladiToFarsiDate(DateTime.Now, false, null);
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/PersianDatePicker.css" rel="stylesheet" />
+<div class="content">
+    @using (Html.BeginForm("Create", "Personnel", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="container-fluid">
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading" id="toolbar">
+                        <div style="float:right">
+                            <h4 class="title">پروفایل کاربری</h4>
+                            <p class="category">اطلاعات شخصی را وارد نمایید</p>
+                        </div>
+                        <div>
+                            <input type="submit" value="ذخیره" class="btn btn-success" />
+                        </div>
+                        <div  style="float:left;margin-left:10px">
+                            <div id="rolebtn">
+                                @if (Model.UserId != null)
+                                {
+                                    @Html.ActionLink("سطح دسترسی", "Edit", "UsersAdmin", new { id = Model.UserId, erea = "Manage" }, new { @class = "btn btn-md btn-info fa fa-reply text-success" })
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel-body">
+                        <div class="card-content">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-4" style="float:right">
+                                <div class="form-group label-floating is-empty">
+                                    <label>
+                                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                                    </label>
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="float:right">
+                                <div class="form-group label-floating is-empty">
+                                    <label>
+                                        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" })
+                                    </label>
+                                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4" style="float:right">
+                                <div class="form-group label-floating is-empty">
+                                    <label>@Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label" })</label>
+                                    <div class="">
+                                        @Html.Label("مرد", "مرد")
+                                        @Html.RadioButtonFor(model => model.Gender, "true", true)
+                                        @Html.Label("زن", "زن")
+                                        @Html.RadioButtonFor(model => model.Gender, "false", false)
+                                        @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="col-md-4" style="float:right">
+                                <div class="form-group label-floating is-empty">
+                                    <label>
+                                        @Html.LabelFor(model => model.PersianBirthDate, htmlAttributes: new { @class = "control-label" })
+                                    </label>
+                                    @Html.EditorFor(model => model.PersianBirthDate, new { htmlAttributes = new { onclick = "PersianDatePicker.Show(this,'" + now + "'); ", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.PersianBirthDate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="float:right">
+                                <div class="form-group label-floating is-empty">
+                                    <label>
+                                        @Html.LabelFor(model => model.NationalCode, htmlAttributes: new { @class = "control-label" })
+                                    </label>
+                                    @Html.EditorFor(model => model.NationalCode, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.NationalCode, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="float:right">
+                                <div class="form-group label-floating is-empty">
+                                    <label>
+                                        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                                    </label>
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+                            <div style="border-top:1px dotted #D2D2D2;height:84px;background-color:rgba(238, 238, 238, 0.4)" class="clear">
+                                <div class="col-md-3" style="float:right">
+                                    <div class="form-group">
+                                        <div style="line-height:61px">
+                                            <label>
+                                                @Html.LabelFor(model => model.IsUserId, htmlAttributes: new { @class = "control-label" })
+                                            </label>
+                                            @Html.EditorFor(model => model.IsUserId)
+                                            @Html.ValidationMessageFor(model => model.IsUserId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.PersonnelCode, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+                                        @Html.EditorFor(model => model.PersonnelCode, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.PersonnelCode, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.CellPhone, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+                                        @Html.EditorFor(model => model.CellPhone, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.CellPhone, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.Mobile, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+                                        @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div style="border-top:1px dotted #D2D2D2" class="clear">
+
+                                <div class="col-md-4" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.EmergencyPhone, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+                                        @Html.EditorFor(model => model.EmergencyPhone, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.EmergencyPhone, "", new { @class = "text-danger" })
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="float:right">
+                                    <div class="label-floating is-empty">
+                                        <label>کارخانه</label><br />
+                                        @Html.DropDownListFor(model => model.FactoryId, new SelectList(ViewBag.Factories, "Value", "Text"), "کارخانه را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.FactoryId, "", new { @class = "text-danger" })
+                                        @*@Html.LabelFor(model => model.FactoryId, htmlAttributes: new { @class = "control-label" })*@
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="float:right">
+                                    <div class="label-floating is-empty">
+                                        <label>واحد کارخانه</label>
+                                        <br/>
+                                        @Html.DropDownListFor(model => model.FactoryUnitId, new SelectList(ViewBag.FactoryUnits, "Value", "Text"), " واحد کارخانه را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.FactoryUnitId, "", new { @class = "text-danger" })
+
+                                        @*@Html.LabelFor(model => model.FactoryUnitId, htmlAttributes: new { @class = "control-label" })*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+
+
+                        </div>
+                        <hr />
+                        <div class="card">
+                           
+                            <div class="card-content">
+                                <div class="col-md-12" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            <label class="control-label">جستجوی آدرس</label>
+                                        </label>
+                                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                @*<div class="col-md-12">
+                                        <div class="form-group label-floating is-empty">
+                                            @Html.EditorFor(model => model.AddressId, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.AddressId, "", new { @class = "text-danger" })
+
+                                            @Html.LabelFor(model => model.AddressId, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                    </div>*@
+
+                                @*<div class="col-md-6">
+                                        <div class="form-group label-floating is-empty">
+
+                                            @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+
+                                            @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                    </div>*@
+                                <div class="clear"></div>
+                                @*<div class="col-md-4" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.CountryName, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+                                        @Html.EditorFor(model => model.CountryName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.CountryName, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>*@
+                                <div class="col-md-4" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+
+                                        @Html.DropDownListFor(model => model.StateId, new SelectList(ViewBag.States, "Value", "Text"), "استان را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.StateId, "", new { @class = "text-danger" })
+
+                                        @*@Html.LabelFor(model => model.StateId, htmlAttributes: new { @class = "control-label" })*@
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+
+                                        @Html.DropDownListFor(model => model.EparchyId, new SelectList(ViewBag.Eparchies, "Value", "Text"), "شهرستان را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.EparchyId, "", new { @class = "text-danger" })
+                                        @*@Html.LabelFor(model => model.EparchyId, htmlAttributes: new { @class = "control-label" })*@
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-md-4" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.CityName, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+                                        @Html.EditorFor(model => model.CityName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.RegionName, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+                                        @Html.EditorFor(model => model.RegionName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.RegionName, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+                                        @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-md-12" style="float:right">
+                                    <div class="form-group label-floating is-empty">
+                                        <label>
+                                            @Html.LabelFor(model => model.PostalCode, htmlAttributes: new { @class = "control-label" })
+                                        </label>
+                                        @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+
+                                <div class="col-md-6" style="float:right">
+                                    @Html.EditorFor(model => model.AddressId, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="Gotoback">
+                @Html.ActionLink("بازگشت به لیست قبلی", "Index")
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </div>
+        </div>
+    }
+
+</div>
+@section scripts
+{
+    <script src="~/Content/material.min.js"></script>
+    <script src="~/Content/material-dashboard.js"></script>
+    <script src="~/Scripts/PersianDatePicker.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#StateId").change(function () {
+                var val = $(this).val();
+                var subItems = "";
+                $.getJSON("@Url.Action("GetEparchy", "Personnel")", { id: val }, function (data) {
+                    $.each(data, function (index, item) {
+                        subItems += "<option value='" + item.Value + "'>" + item.Text + "</option>"
+                    });
+                    $("#EparchyId").html(subItems)
+                });
+            });
+            $("#FactoryId").change(function () {
+                var val = $(this).val();
+                var subItems = "";
+                $.getJSON("@Url.Action("GetFactoryUnit", "Personnel")", { id: val }, function (data) {
+                    $.each(data, function (index, item) {
+                        subItems += "<option value='" + item.Value + "'>" + item.Text + "</option>"
+                    });
+                    $("#FactoryUnitId").html(subItems)
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#Title").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Manage/Address/AutoAddress",
+                        type: "POST",
+                        dataType: "json",
+                        data: { searchString: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                $("#AddressId").val(item.Id);
+                                $("#CityName").val(item.CityName);
+                                $("#CountryName").val(item.CountryName);
+                                $("#EparchyId").val(item.EparchyId);
+                                $("#StateId").val(item.StateId);
+                                $("#RegionName").val(item.RegionName);
+                                $("#PostalCode").val(item.PostalCode);
+                                $("#Address").val(item.Address);
+                                return { label: item.Title, value: item.Title };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+
+            $('#FactoryUnitId option').hide();
+            $('#FactoryId').change(function () {
+                if ($(this).val() != "") {
+                    $('#FactoryUnitId option').show();
+
+                }
+                else {
+                    $('#FactoryUnitId option').remove();
+                    $('#FactoryUnitId').append($('<option>', {
+                        text: 'واحد کارخانه را انتخاب کنید'
+                    }));
+                }
+            });
+
+            $('#EparchyId option').hide();
+            $('#StateId').change(function () {
+                if ($(this).val() != "") {
+                    $('#EparchyId option').show();
+
+                }
+                else {
+                    $('#EparchyId option').remove();
+                    $('#EparchyId').append($('<option>', {
+                        text: 'شهرستان را انتخاب کنید'
+                    }));
+                }
+            });
+
+        })
+    </script>
+}
+

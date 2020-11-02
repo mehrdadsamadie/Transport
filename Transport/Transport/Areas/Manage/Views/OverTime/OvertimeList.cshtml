@@ -1,0 +1,48 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Transport.Areas.Manage.Models.OverTimeViewModel>
+
+<table class="table table-striped">
+    <thead class="text-primary">
+        <tr>
+            <th>
+                تاریخ شروع
+            </th>
+            <th>
+                تاریخ پایان
+            </th>
+            <th>
+                نرخ اضافه کاری
+            </th>
+            <th>
+                قفل شده
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsLock)
+            </td>
+            <td class="icon-tool">
+                @Html.ActionLink("  ", "create", new { id = item.Id }, new { @class = "btn btn-success fa fa-pencil-square-o text-info" })
+                @*@Html.ActionLink("  ", "Details", new { id = item.Id }, new { @class = "btn btn-info fa fa-reply text-success" })*@
+                @Html.ActionLink("  ", "Delete", new { id = item.Id }, new { @class = "btn btn-danger fa fa-times text-danger" })
+            </td>
+
+
+        </tr>
+    }
+
+</table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { pageNumber = page }))

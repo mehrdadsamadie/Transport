@@ -1,0 +1,136 @@
+﻿@model IEnumerable<Transport.Areas.Manage.Models.DistancePriceIndex>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "لیست قیمت مسیر";
+}
+
+<div class="content">
+    <div class="container-fluid">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="well">
+                            <div class="col-lg-2">
+                                <div>
+                                    <br />
+                                    @Html.ActionLink("ایجاد قیمت مسیر", "Create", null, new { @class = "btn btn-danger btn-md fa fa-plus-circle text-btn " })
+                                </div>
+                            </div>
+                            <div id="search-filter">
+                                <div class="dropdownselect" id="cust-groupfilter">
+                                    @Html.DropDownList("driverTypeId", new SelectList(ViewBag.DriverTypes, "Value", "Text"), "نوع راننده را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.DropDownList("distanceId", new SelectList(ViewBag.Distances, "Value", "Text"), "مسافت را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+
+                                    <input type="button" class="btn btn-sm btn-primary cust-btn" value="جستجو" id="btnSearch" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="card-table">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header" data-background-color="purple">
+                                        <h4 class="title">قیمت مسیر </h4>
+                                        <p class="category">لیست قیمت مسیر</p>
+                                    </div>
+                                    <div id="DistancePriceList" class="card-content table-responsive">
+                                        @Html.Partial("DistancePriceList", Model)
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@section scripts
+{
+    <script type="text/javascript">
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+            $.ajax({
+                url: location.href,
+                success: function (result) {
+                    $('#DistancePriceList').html(result);
+                }
+            });
+        });
+
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { pageNumber: page, Url: url };
+                history.pushState(null, obj.pageNumber, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function search() {
+            alert(1);
+            $.ajax({
+                url: "/Manage/DistancePrice/Index?driverTypeId=" + $('#driverTypeId').val() + "&distanceId=" + $('#distanceId').val(),
+                success: function (result) {
+                    ChangeUrl("index", "/Manage/DistancePrice/Index?driverTypeId=" + $('#driverTypeId').val() + "&distanceId=" + $('#distanceId').val());
+                    $('#DistancePriceList').html(result);
+                }
+            });
+        }
+
+        $(function () {
+            $("#btnSearch").click(function () {
+                search();
+            });
+
+            $("#SearchString").keypress(function (e) {
+                if (e.keyCode == 13) {
+                    search();
+                }
+            });
+            $('body').on('click', '#DistancePriceList .pagination a', function (event) {
+                event.preventDefault();
+                console.log('page');
+                var driverTypeId = $('#driverTypeId').val();
+                var distanceId = $('#distanceId').val();
+
+
+
+                var QueryString = '';
+                if (driverTypeId != undefined && driverTypeId != '') {
+                    QueryString += '&driverTypeId=' + driverTypeId;
+                }
+                if (distanceId != undefined && distanceId != '') {
+                    distanceId += '&distanceId=' + distanceId;
+                }
+
+                var url = $(this).attr('href') + QueryString;
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    success: function (result) {
+                        ChangeUrl('index', url);
+                        $('#DistancePriceList').html(result);
+                    }
+                });
+            });
+        });
+    </script>
+
+}
+
+

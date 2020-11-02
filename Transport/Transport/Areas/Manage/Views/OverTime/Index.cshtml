@@ -1,0 +1,129 @@
+﻿@model IEnumerable<Transport.Areas.Manage.Models.OverTimeViewModel>
+
+@{
+    var now = Tavanmand.Classes.PersianCalendarConverter.MiladiToFarsiDate(DateTime.Now, false, null);
+    ViewBag.Title = "لیست اضافه کاری ها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/PersianDatePicker.min.css" rel="stylesheet" />
+<div class="content">
+    <div class="container-fluid">
+        <div id="PersonnelList">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="col-md-2">
+
+                            @Html.ActionLink("ایجاد اضافه کاری", "Create", null, new { @class = "btn btn-danger btn-md fa fa-plus-circle text-btn " })
+                        </div>
+                        <div id="search-filter">
+                            <div class="dropdownselect" id="cust-groupfilter">
+                                <input id="StartDate" name="StartDate" placeholder="تاریخ شروع" type="text" value="" onclick="PersianDatePicker.Show(this,'@now')" />
+                                <input id="EndDate" name="EndDate" placeholder="تاریخ پایان" type="text" value="" onclick="PersianDatePicker.Show(this,'@now')" />
+                                <input type="button" class="btn btn-sm btn-primary cust-btn" value="جستجو" id="btnSearch" />
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="panel-body">
+                        <div id="card-table">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header" data-background-color="purple">
+                                        <h4 class="title">اضافه کاری</h4>
+                                        <p class="category">لیست اضافه کاری های افراد</p>
+                                    </div>
+                                    <div id="OvertimeList" class="card-content table-responsive">
+                                        @Html.Partial("OvertimeList", Model)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="~/Scripts/PersianDatePicker.min.js"></script>
+    <script type="text/javascript">
+
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+            $.ajax({
+                url: location.href,
+                success: function (result) {
+                    $('#OvertimeList').html(result);
+                }
+            });
+        });
+
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { pageNumber: page, Url: url };
+                history.pushState(null, obj.pageNumber, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function search() {
+            $.ajax({
+                url: "/Manage/OverTime/Index?StartDate=" + $('#StartDate').val() + "&EndDate=" + $('#EndDate').val(),
+                success: function (result) {
+                    ChangeUrl("index", "/Manage/OverTime/Index?StartDate=" + $('#StartDate').val() + "&EndDate=" + $('#EndDate').val());
+                    $('#OvertimeList').html(result);
+                }
+            });
+        }
+
+        $(function () {
+            $("#btnSearch").click(function () {
+                search();
+            });
+
+            $('body').on('click', '#OvertimeList .pagination a', function (event) {
+                event.preventDefault();
+                console.log('page');
+                var StartDate = $('#StartDate').val();
+                var EndDate = $('#EndDate').val();
+                var QueryString = '';
+                if (StartDate != undefined && StartDate != '') {
+                    searchString += '&StartDate=' + Date;
+                }
+                if (EndDate != undefined && EndDate != '') {
+                    searchString += '&EndDate=' + EndDate;
+                }
+
+                var url = $(this).attr('href') + searchString;
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    success: function (result) {
+                        ChangeUrl('index', url);
+                        $('#OvertimeList').html(result);
+                    }
+                });
+            });
+
+
+        });
+    </script>
+
+}

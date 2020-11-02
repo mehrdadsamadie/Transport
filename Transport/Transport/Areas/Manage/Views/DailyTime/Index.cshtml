@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Transport.Areas.Manage.Models.DailyTimeViewModel>
+@{
+    var now = Tavanmand.Classes.PersianCalendarConverter.MiladiToFarsiDate(DateTime.Now, false, null);
+    ViewBag.Title = "لیست شیفت های هفتگی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/PersianDatePicker.min.css" rel="stylesheet" />
+
+<div class="content">
+    <div class="container-fluid">
+
+        <div id="PersonnelList">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div style="float:left">
+                            <div>
+                                <br />
+                                @Html.ActionLink("ایجاد شیفت ", "Create", null, new { @class = "btn btn-danger btn-md fa fa-plus-circle text-btn " })
+                            </div>
+                        </div>
+                        <div  id="search-filter">
+                            <div class="dropdownselect" id="cust-groupfilter">
+                                <input id="StartDate" name="StartDate" placeholder="تاریخ شروع" type="text" value="" onclick="PersianDatePicker.Show(this,'@now')" />
+                                <input id="EndDate" name="EndDate" placeholder="تاریخ پایان" type="text" value="" onclick="PersianDatePicker.Show(this,'@now')" />
+                                <input type="button" class="btn btn-sm btn-primary cust-btn" value="جستجو" id="btnSearch" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel-body">
+                        <div id="card-table">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header" data-background-color="purple">
+                                        <h4 class="title">شیفت ها</h4>
+                                        <p class="category">لیست شیفت های هفتگی</p>
+                                    </div>
+                                    <div id="PersonnelList" class="card-content table-responsive">
+                                        @Html.Partial("DailyTimeList", Model)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/Scripts/PersianDatePicker.min.js"></script>
+    <script type="text/javascript">
+
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+            $.ajax({
+                url: location.href,
+                success: function (result) {
+                    $('#DailyTimeList').html(result);
+                }
+            });
+        });
+
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { pageNumber: page, Url: url };
+                history.pushState(null, obj.pageNumber, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function search() {
+            $.ajax({
+                url: "/Manage/DailyTime/Index?StartDate=" + $('#StartDate').val() + "&EndDate=" + $('#EndDate').val(),
+                success: function (result) {
+                    ChangeUrl("index", "/Manage/DailyTime/Index?StartDate=" + $('#StartDate').val() + "&EndDate=" + $('#EndDate').val());
+                    $('#DailyTimeList').html(result);
+                }
+            });
+        }
+
+        $(function () {
+            $("#btnSearch").click(function () {
+                search();
+            });
+
+
+            //$("#StartDate").keypress(function(e) {
+            //    if (e.keyCode == 13) {
+            //        search();
+            //    }
+            //});
+            $('body').on('click', '#DailyTimeList .pagination a', function (event) {
+                event.preventDefault();
+                console.log('page');
+                var StartDate = $('#StartDate').val();
+                var EndDate = $('#EndDate').val();
+                var QueryString = '';
+                if (StartDate != undefined && StartDate != '') {
+                    QueryString += '&StartDate=' + StartDate;
+                }
+                if (EndDate != undefined && EndDate != '') {
+                    QueryString += '&EndDate=' + EndDate;
+                }
+
+                var url = $(this).attr('href') + QueryString;
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    success: function (result) {
+                        ChangeUrl('index', url);
+                        $('#DailyTimeList').html(result);
+                    }
+                });
+            });
+
+
+        });
+    </script>
+
+}

@@ -1,0 +1,239 @@
+.container2 {
+    width: 300px;
+    margin: auto;
+    padding-top: 50px;
+}
+
+.pupcalc {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    background: rgba(0, 0, 0, 0.32);
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    z-index: 99999;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    height: 1000%;
+    -webkit-transform: translate3d(0, 0, 0);
+    transition: 0.1s opacity linear;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+    .pupcalc:before {
+        content: "";
+        top: 0px;
+        bottom: 0px;
+        right: 0;
+        height: 150%;
+        width: 100%;
+        z-index: -1;
+        position: fixed;
+        background-color: transparent;
+    }
+
+#persianCalendar1 {
+    border-bottom: none;
+    min-width: 258px !important;
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    border-radius: 0px;
+}
+
+#picker-persian {
+    padding: 3px;
+    z-index: 1;
+    position: static;
+}
+
+#cnt {
+    height: 45px;
+    width: 100%;
+    margin: auto;
+    background-color: #fff;
+    /*box-shadow:1px 8px 3px #ddd*/
+}
+
+.ion-android-calendar {
+    float: left;
+    position: absolute;
+    left: 31px;
+    z-index: 999;
+    font-size: 32px;
+    line-height: 26px;
+    margin-top: -36px;
+}
+
+.calender {
+    width: 250px;
+    height: 350px;
+    background-color: #f7f7f7;
+    border-radius: 5px;
+    font-family: BYekan,Calibri;
+    font-size: 12px;
+    border: 1px solid #d8d8d8;
+    direction: rtl;
+    z-index: 9999;
+    position: absolute;
+    display: flex;
+    -webkit-box-direction: normal;
+    -webkit-box-orient: vertical;
+    flex-direction: column;
+    top: 100px;
+}
+
+    .calender tfoot tr {
+        height: 41px;
+        line-height: 41px;
+        font-family: BYekan;
+        font-size: 13px;
+    }
+
+        .calender tfoot tr td {
+            text-align: center;
+        }
+
+.header-cal {
+    position: relative;
+    height: 124px;
+    background-color: #1b363f;
+    /*border-bottom: 1px solid #d8d8d8;*/
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.calender table thead tr {
+    font-family: 'B Yekan';
+    font-size: 9px;
+    background-color: #e6b500;
+    color: #fff;
+    height: 30px;
+    line-height: 30px;
+    direction: rtl;
+}
+
+.calender table, .calender tr, .calender td, .calender thead, .calender tbody {
+    direction: rtl;
+}
+
+.calender .nowdate {
+    background-color: #ffcbbe;
+    border-radius: 50%;
+}
+
+.calender table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+    .calender table tr td {
+        text-align: center;
+        font-size: 13px;
+        color: #666;
+    }
+
+    .calender table tbody td {
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+    }
+
+.calender input {
+    width: 50px;
+    height: 30px;
+    line-height: 30px;
+    border: none;
+    text-align: center;
+    border-radius: 3px;
+}
+
+.calender i {
+    color: #fff;
+    font-size: 20px;
+}
+
+.today {
+    background-color: rgba(17, 193, 243, 0.4);
+    border-radius: 50%;
+}
+
+.year-cal div {
+    float: left;
+    width: 33%;
+    text-align: center;
+    padding-top: 12px;
+}
+
+.year-cal {
+    padding-top: 10px;
+}
+
+    .year-cal input {
+        float: left;
+        box-shadow: 0 4px 0px -3px gray;
+        background-color: transparent;
+        color: #fff;
+        text-align: center !important;
+        border-radius: 0px;
+        width: 33%;
+        padding-right: 0px !important;
+    }
+
+.month-cal div {
+    float: left;
+    width: 33%;
+    text-align: center;
+    padding-top: 12px;
+}
+
+.month-cal, .year-cal {
+    height: 47px;
+    width: 100%;
+    position: relative;
+}
+
+    .month-cal input {
+        float: left;
+        box-shadow: 0 4px 0px -3px gray;
+        background-color: transparent;
+        color: #fff;
+        text-align: center !important;
+        border-radius: 0px;
+        width: 33%;
+        padding-right: 0px !important;
+    }
+
+.clear {
+    clear: both;
+}
+
+input {
+    width: 200px;
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.notvalidpattern {
+    border-color: red !important;
+    color: red !important;
+}
+
+.subtab angucomplete-alt {
+    width: 100%
+}

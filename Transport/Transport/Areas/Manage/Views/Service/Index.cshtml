@@ -1,0 +1,165 @@
+﻿
+@{
+    var now = Tavanmand.Classes.PersianCalendarConverter.MiladiToFarsiDate(DateTime.Now, false, null);
+    ViewBag.Title = "لیست سرویس ها";
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (User.IsInRole("TranasportManager"))
+    {
+        Layout = "~/Views/Shared/_LayoutTransportManager.cshtml";
+    }
+    else if (User.IsInRole("Transport"))
+    {
+        Layout = "~/Views/Shared/_LayoutTransport.cshtml";
+    }
+
+    string date = Tavanmand.Classes.PersianCalendarConverter.MiladiToFarsiDate(DateTime.Now, false, null);
+    var _isAdmin = (User.IsInRole("Admin").ToString()).ToLower();
+    var _isFactorManager = User.IsInRole("FactorManager").ToString().ToLower();
+    var _isTransport = User.IsInRole("Transport").ToString().ToLower();
+
+}
+<style type="text/css">
+    .myGrid {
+        width: 100%;
+        height: 860px !important
+    }
+
+        .myGrid .ui-grid-header-cell {
+            height: 60px;
+        }
+</style>
+<link href="~/Content/PersianDatePicker.min.css" rel="stylesheet" />
+@*<link href="~/Scripts/jqGrid/css/ui.jqgrid.css" rel="stylesheet" />*@
+<link href="~/Scripts/angularGrid/ui-grid.min.css" rel="stylesheet" />
+<link href="~/Scripts/angularGrid/main.css" rel="stylesheet" />
+<link href="~/Scripts/auto/angucomplete-alt.css" rel="stylesheet" />
+
+<div class="content" ng-app="transport" ng-controller="serviceIndexCtrl">
+    <div class="container-fluid" ng-bind-html-unsafe="{{setTime('@date')}}">
+        <div id="PersonnelList" ng-init="setRole('@_isAdmin','@_isFactorManager','@_isTransport')">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+
+                        <div style="float:left">
+                            @if (User.IsInRole("Admin") || User.IsInRole("TranasportManager"))
+                            {
+                                    <label id="createService" class="btn btn-danger btn-md fa fa-plus-circle text-btn " data-url="@Url.Action("Create", "Service")">ایجاد درخواست</label>
+                                
+                            }
+                            <label class="btn btn-primary btn-md fa fa-refresh text-btn" ng-click="reSet()">بروزرسانی</label>
+                        </div>
+
+                        <div id="search-filter">
+                            <div class="dropdownselect" id="cust-groupfilter">
+                                <select ng-model="selectedServiceStatu"
+                                        ng-options="option.Id as option.Name for option in ServiceStatues"></select>
+
+                                <div class="btn btn-sm btn-success" ng-click="changeServiceStatus()">تغییر وضعیت</div>
+                                @if (User.IsInRole("Admin") || User.IsInRole("TranasportManager"))
+                                {
+                                    <label style="padding:5px 13px;margin-right: 10px!important;" class="well-border">
+                                        <lable ng-click="confirmservice(null,false)" class="btn btn-sm btn-danger">لغو سرویس</lable>
+                                        <lable ng-click="confirmservice(null,true)" class="btn btn-sm btn-success">پذیرش سرویس</lable>
+                                    </label>
+
+                                }
+
+                                <br />
+
+                                <div class="form-group form-inline">
+                                    <div id="autocom" style="float:right;margin-left:10px">
+                                        <angucomplete-alt id="members2"
+                                                          placeholder="نام راننده..."
+                                                          pause="400"
+                                                          selected-object="selectedDriver"
+                                                          remote-url="/Manage/Driver/AutoPersonel?searchString="
+                                                          title-field="Text"
+                                                          input-class="form-control form-control-small" matchclass="highlight" />
+                                    </div>
+                                    <input readonly="readonly" id="startDate" data-val="true" placeholder="تاریخ شروع..." class="form-control" type="text" name="startDate" ng-model="filter.startDate" persiandatepicker required />
+                                    <input readonly="readonly" id="startDate" data-val="true" placeholder="تاریخ پایان ..." class="form-control" type="text" name="endDate" ng-model="filter.endDate" persiandatepicker required />
+                                    <input ng-model="filter.startTime" class="form-control" placeholder="از..." id="basicExample1" />
+                                    <input ng-model="filter.endTime" class="form-control" placeholder="تا..." id="basicExample" />
+                                    <label style="margin-right:10px" ng-click="exportToExcel()" id="exportExcel" class="btn btn-default btn-sm btn-export"><span class="fa fa-download"></span>خروجی اکسل</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel-body">
+                        <div ui-grid="gridOptions" class="myGrid" dir="rtl" ui-grid-pinning ui-grid-auto-resize ui-grid-resize-columns ui-grid-pagination ui-grid-selection ui-grid-exporter></div>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="exampleModalLabel">لیست درخواست ها</h4>
+                                    </div>
+                                    <div class="modal-body" style="padding-top:0px">
+                                        <table class="table-responsive table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>درخواست کننده</th>
+                                                    <th>واحد</th>
+                                                    <th>مبدا</th>
+                                                    <th>مقصد</th>
+                                                    <th>تلفن</th>
+                                                    <th>نفرات</th>
+                                                </tr>
+                                            </thead>
+                                            <tr  ng-repeat=" item in selectedService">
+                                                <td>{{item.FullName}}</td>
+                                                <td>{{item.Factory}}</td>
+                                                <td style="width:25%">{{item.Begining}}</td>
+                                                <td style="width:25%">{{item.Destination}}</td>
+                                                <td>{{item.Mobile}}</td>
+                                                <td>{{item.Number}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/Scripts/datepicker/PersianDatePicker.min.js"></script>
+    <script src="~/Content/timepicker/jquery.timepicker.min.js"></script>
+    <script src="~/Scripts/alex-date-time.js"></script>
+    <script src="~/Scripts/auto/angucomplete-alt.js"></script>
+    <script src="~/Scripts/serviceIndex/serviceIndexController.js"></script>
+    <script>
+        $(function () {
+            $('#basicExample').timepicker({ 'timeFormat': 'H:i' });
+        });
+        $(function () {
+            $('#basicExample1').timepicker({ 'timeFormat': 'H:i' });
+        });
+        $(document).ready(function () {
+            $("#basicExample").typeATime();
+
+        });
+        $(document).ready(function () {
+            $("#basicExample1").typeATime();
+
+        });
+        $('#createService').click(function () {
+            window.location.href = $(this).data('url');
+        });
+    </script>
+}

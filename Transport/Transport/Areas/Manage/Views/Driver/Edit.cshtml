@@ -1,0 +1,341 @@
+﻿@model Transport.Areas.Manage.Models.DriverDetail
+
+@{
+    var now = Tavanmand.Classes.PersianCalendarConverter.MiladiToFarsiDate(DateTime.Now, false, null);
+    ViewBag.Title = "ویرایش پروفایل راننده";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var i = 0;
+    var t = 0;
+}
+<link href="~/Content/PersianDatePicker.min.css" rel="stylesheet" />
+<div class="content" ng-app="transport" ng-controller="DriverEdit">
+
+    <div class="container-fluid">
+        <div class="row">
+            <a href="/" class="navbar-brand-title">ویرایش راننده</a>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="well-border row">
+                    <div class="col-md-12">
+                        <div class="card card-plain">
+                            <div id="Create">
+
+                                <div class="card-header" data-background-color="purple" style="height:40px;line-height:40px">
+                                    ایجاد نوع راننده
+                                </div>
+                                <div class="btn btn-danger">
+                                    @Html.ActionLink("ساخت وسیله نقلیه", "Create", "Vehicle", new { driverId = Model.Id }, null)
+                                </div>
+                                <div class="card-content table-responsive">
+                                    @Html.HiddenFor(m => m.NewDriverType.DriverId)
+
+                                    @Html.HiddenFor(m => m.NewDriverType.Id)
+                                    <table class="table table-hover">
+                                        <thead class="text-primary">
+                                            <tr>
+                                                <th>نوع راننده</th>
+                                                <th>فعال</th>
+                                                <th>تاریخ شروع</th>
+                                                <th>تاریخ پایان</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="info">
+                                                <td>
+                                                    @Html.DropDownListFor(m => m.NewDriverType.DriverTypeId, new SelectList(ViewBag.DriverTypes, "Value", "Text"), "نوع راننده را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(m => m.NewDriverType.DriverTypeId, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    <div class="checkbox-inline">
+                                                        <label>
+                                                            @Html.EditorFor(m => m.NewDriverType.IsActive, new { htmlAttributes = new { @class = "" } })
+
+                                                        </label>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.NewDriverType.IsActive, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @*@Html.LabelFor(m => m.NewDriverType.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                                                    @Html.EditorFor(m => m.NewDriverType.StartDate, new { htmlAttributes = new { onclick = "PersianDatePicker.Show(this,'" + now + "'); ", @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(m => m.NewDriverType.StartDate, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @*@Html.LabelFor(m => m.NewDriverType.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                                                    @Html.EditorFor(m => m.NewDriverType.EndDate, new { htmlAttributes = new { onclick = "PersianDatePicker.Show(this,'" + now + "'); ", @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(m => m.NewDriverType.EndDate, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    <input type="submit" ng-click="addDriverType(-1)" value="ذخیره" class="btn btn-success" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="clear"></div>
+                        <div class="card card-plain">
+                            <div id="Create">
+                                <div class="card-header" data-background-color="purple" style="height:40px;line-height:40px">
+                                    ایجاد تاریخچه
+                                </div>
+                                <div class="card-content table-responsive">
+                                    @Html.HiddenFor(m => m.NewDriverHistory.DriverId)
+                                    @Html.HiddenFor(m => m.NewDriverHistory.Id)
+                                    <table class="table table-hover">
+                                        <thead class="text-primary">
+                                            <tr>
+                                                <th>تاریخچه راننده</th>
+                                                <th>توضیحات</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @Html.EditorFor(m => m.NewDriverHistory.Date, new { htmlAttributes = new { onclick = "PersianDatePicker.Show(this,'" + now + "'); ", @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(m => m.NewDriverHistory.Date, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.EditorFor(m => m.NewDriverHistory.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(m => m.NewDriverHistory.Description, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    <input type="submit" ng-click="addDriverHistory(-1)" value="ذخیره" class="btn btn-success" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+
+                </div>
+
+                <div class="card">
+                    <div class="card-header" data-background-color="purple">
+                        <h4 class="title">پروفایل راننده</h4>
+                        <p class="category">اطلاعات راننده مورد نظر را ویرایش نمایید</p>
+                    </div>
+                    <div class="card-content table-responsive">
+                        <div class="col-md-12 alert alert-warning">
+                            <label>
+                                <i class="fa fa-user" ></i>
+                                @Html.DisplayNameFor(model => model.FullName):
+                                @Html.DisplayFor(model => model.FullName)
+                            </label>
+                            <label>
+                                <i class="fa fa-dot-circle-o"></i>
+                                @Html.DisplayNameFor(Model => Model.PersonnelCode):
+                                @Html.DisplayFor(model => model.PersonnelCode)
+                            </label>
+                        </div>
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead class="text-primary">
+                                    <tr>
+                                        <th>نوع راننده</th>
+                                        <th>فعال</th>
+                                        <th>تاریخ شروع</th>
+                                        <th>تاریخ پایان</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.DriverTypes)
+                                    {
+
+                                    <tr id="driverType@(i)">
+
+                                        <td style="padding:0px 27px">
+                                            @Html.DropDownListFor(m => item.DriverTypeId, new SelectList(ViewBag.DriverTypes, "Value", "Text", Model.DriverTypes[i].DriverTypeId), "نوع راننده را انتخاب کنید", new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(m => item.DriverTypeId, "", new { @class = "text-danger" })
+                                        </td>
+                                        <td id="checked" style="padding:0px 27px">
+                                            @Html.EditorFor(m => item.IsActive, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(m => item.IsActive, "", new { @class = "text-danger" })
+                                        </td>
+                                        <td style="padding:0px 27px">
+                                            @Html.EditorFor(m => item.StartDate, new { htmlAttributes = new { onclick = "PersianDatePicker.Show(this,'" + now + "'); ", @class = "form-control" } })
+                                            @Html.ValidationMessageFor(m => item.StartDate, "", new { @class = "text-danger" })
+                                        </td>
+                                        <td style="padding:0px 27px">
+                                            @Html.EditorFor(m => item.EndDate, new { htmlAttributes = new { onclick = "PersianDatePicker.Show(this,'" + now + "'); ", @class = "form-control" } })
+                                            @Html.ValidationMessageFor(m => item.EndDate, "", new { @class = "text-danger" })
+                                        </td>
+                                        <td class="icon-tool" style="padding:0px 27px">
+                                            @Html.ActionLink("  ", "DeleteRDriverType", new { id = item.Id }, new { @class = "btn btn-danger fa fa-times text-danger" })|
+                                            <a class="btn btn-success fa fa-pencil-square-o text-success" ng-click="addDriverType('@i')"></a>
+                                        </td>
+                                        <td style="padding:0px 27px">
+                                            @Html.HiddenFor(m => item.DriverId)
+
+                                            @Html.HiddenFor(m => item.Id)
+                                        </td>
+                                    </tr>
+
+
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" data-background-color="purple" style="height:40px;line-height:40px">
+                        <h4 class="title">تاریحچه </h4>
+                    </div>
+                    <div class="card-content table-responsive">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead class="text-primary" >
+                                    <tr>
+                                        <th>توضیح </th>
+                                        <th>تاریخ </th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.DriverHistories)
+                                    {
+
+                                        <tr id="driverHistory@(t)">
+                                            <td id="checked" style="padding:0px 27px">
+                                                @Html.EditorFor(m => item.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(m => item.Description, "", new { @class = "text-danger" })
+                                            </td>
+                                            <td style="padding:0px 27px">
+                                                @Html.EditorFor(m => item.Date, new { htmlAttributes = new { onclick = "PersianDatePicker.Show(this,'" + now + "'); ", @class = "form-control" } })
+                                                @Html.ValidationMessageFor(m => item.Date, "", new { @class = "text-danger" })
+                                            </td>
+
+                                            <td class="icon-tool" style="padding:0px 27px">
+                                                @Html.ActionLink("  ", "DeleteDriverHistory", new { id = item.Id }, new { @class = "btn btn-danger fa fa-times text-danger" })
+                                                <a class="btn btn-success fa fa-pencil-square-o text-success" ng-click="addDriverHistory('@t')"></a>
+                                            </td>
+                                            <td style="padding:0px 27px">
+                                                @Html.HiddenFor(m => item.DriverId)
+
+                                                @Html.HiddenFor(m => item.Id)
+                                            </td>
+                                        </tr>
+
+
+                                        t++;
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="Gotoback">
+                    @Html.ActionLink("بازگشت به لیست قبلی", "Index")
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@Scripts.Render("~/bundles/angular")
+@section scripts
+{
+    <script src="~/Content/material.min.js"></script>
+    <script src="~/Content/material-dashboard.js"></script>
+    <script src="~/Scripts/PersianDatePicker.js"></script>
+    <script>
+        var app = angular.module("transport", []);
+        app.controller("DriverEdit", function ($scope, $http, $rootScope) {
+            $scope.addDriverType = function (index) {
+                if (index != -1) {
+                    var rDriverType =
+                    {
+                        EndDate: document.querySelector("#driverType" + index + " #item_EndDate").value,
+                        IsActive: document.querySelector("#driverType" + index + " #item_IsActive").value,
+                        DriverTypeId: document.querySelector("#driverType" + index + " #item_DriverTypeId").value,
+                        StartDate: document.querySelector("#driverType" + index + " #item_StartDate").value,
+                        Id: document.querySelector("#driverType" + index + " #item_Id").value,
+                        DriverId: document.querySelector("#driverType" + index + " #item_DriverId").value
+                    };
+                }
+
+                else {
+                    var rDriverType =
+                   {
+                       EndDate: document.querySelector("#NewDriverType_EndDate").value,
+                       IsActive: document.querySelector("#NewDriverType_IsActive").value,
+                       DriverTypeId: document.querySelector("#NewDriverType_DriverTypeId").value,
+                       StartDate: document.querySelector("#NewDriverType_StartDate").value,
+                       Id: document.querySelector("#NewDriverType_Id").value,
+                       DriverId: document.querySelector("#NewDriverType_DriverId").value
+                   };
+                }
+                $http({
+                    url: '/Manage/Driver/AddDriverType',
+                    method: 'Post',
+                    data: {
+                        model: rDriverType
+                    }
+                }).then(function (result) {
+                    location.reload();
+                }, function (error) {
+
+                });
+            }
+
+
+            $scope.addDriverHistory = function (index) {
+                alert(index);
+                var rDriverHistory = {};
+                if (index != -1) {
+
+                    rDriverHistory =
+                   {
+                       Date: document.querySelector("#driverHistory" + index + " #item_Date").value,
+                       Description: document.querySelector("#driverHistory" + index + " #item_Description").value,
+                       Id: document.querySelector("#driverHistory" + index + " #item_Id").value,
+                       DriverId: document.querySelector("#driverHistory" + index + " #item_DriverId").value,
+                   };
+                }
+
+                else {
+                    rDriverHistory =
+                  {
+                      Date: document.querySelector("#NewDriverHistory_Date").value,
+                      Description: document.querySelector("#NewDriverHistory_Description").value,
+                      Id: document.querySelector("#NewDriverHistory_Id").value,
+                      DriverId: document.querySelector("#NewDriverHistory_DriverId").value
+                  };
+                }
+               
+                $http({
+                    url: '/Manage/Driver/AddDriverHistory',
+                    method: 'Post',
+                    data: {
+                        model: rDriverHistory
+                    }
+                }).then(function (result) {
+                    location.reload();
+                }, function (error) {
+
+                });
+            }
+
+
+
+        });
+
+    </script>
+}

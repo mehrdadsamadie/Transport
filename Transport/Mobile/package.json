@@ -1,0 +1,23 @@
+{
+    "name": "Mobile",
+    "version": "1.0.0",
+    "private": true,
+    "dependencies": {
+        "com.borismus.webintent": "~1.0.0",
+        "cordova-plugin-compat": "~1.1.0",
+        "cordova-plugin-file": "~4.3.3",
+        "cordova-plugin-file-transfer": "~1.6.3",
+        "cordova-plugin-geolocation": "~2.4.3",
+        "cordova-plugin-whitelist": "1.2.2"
+    },
+    "cordova": {
+        "plugins": {
+            "com.borismus.webintent": {},
+            "cordova-plugin-compat": {},
+            "cordova-plugin-file": {},
+            "cordova-plugin-file-transfer": {},
+            "cordova-plugin-geolocation": {},
+            "cordova-plugin-whitelist": {}
+        }
+    }
+}

@@ -1,0 +1,91 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Transport.Areas.Manage.Models.DriverView>
+
+
+<table class="table table-striped table-hover">
+    <thead class="text-primary">
+        <tr>
+
+            <th>
+                نام
+            </th>
+            <th>
+                کد پرسنلی
+            </th>
+            <th>
+                نوع راننده
+            </th>
+            <th>
+                تاریخچه دارد
+            </th>
+            <th>
+                فعال
+            </th>
+            <th>
+                حذف شده
+            </th>
+            <th>
+                بلاک
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonelCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DriverType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsHistory)
+            </td>
+            <td>
+                @if(item.IsActive==true)
+                    {
+                <i class="fa fa-check text-success"></i>
+                }
+                else{
+                <i class="fa fa-times text-danger"></i>
+                }
+               
+                @*@Html.DisplayFor(modelItem => item.IsActive)*@
+            </td>
+            <td>
+                @if (item.IsDelete == true)
+                {
+                    <i class="fa fa-check text-success"></i>
+                }
+                else
+                {
+                    <i class="fa fa-times text-danger"></i>
+                }
+            </td>
+            <td>
+                @if (item.IsBlack == true)
+                {
+                    <i class="fa fa-check text-success"></i>
+                }
+                else
+                {
+                    <i class="fa fa-times text-danger"></i>
+                }
+
+            </td>
+            <td class="icon-tool">
+                @Html.ActionLink("  ", "Edit", new { id = item.DriverId }, new { @class = "btn btn-success fa fa-pencil-square-o text-info" }) 
+                @*@Html.ActionLink("  ", "Details", new { id = item.DriverId }, new { @class = "btn btn-info fa fa-reply text-success" } ) *@
+                @Html.ActionLink("  ", "Delete", new { id = item.DriverId }, new { @class = "btn btn-danger fa fa-times text-danger" })
+            </td>
+        </tr>
+    }
+
+</table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { pageNumber = page }))
